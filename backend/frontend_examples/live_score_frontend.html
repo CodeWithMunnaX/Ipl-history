@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Live Score - Ball by Ball</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .input-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-group input {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .live-score-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .match-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .score-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-width: 120px;
+        }
+
+        .score-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .score-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .current-players {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .player-info {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .player-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .player-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .over-view {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .over-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .current-over {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .over-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .over-number {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .over-bowler {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .balls-display {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ball {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .ball.dot {
+            background: #e9ecef;
+            color: #666;
+        }
+
+        .ball.runs {
+            background: #28a745;
+            color: white;
+        }
+
+        .ball.wicket {
+            background: #dc3545;
+            color: white;
+        }
+
+        .ball.wide {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .ball.no-ball {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .ball.four {
+            background: #007bff;
+            color: white;
+        }
+
+        .ball.six {
+            background: #6f42c1;
+            color: white;
+        }
+
+        .recent-overs {
+            margin-top: 20px;
+        }
+
+        .recent-overs-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .overs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .over-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .over-card.current {
+            border-color: #667eea;
+            background: #e3f2fd;
+        }
+
+        .over-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .over-number-small {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .over-runs-small {
+            font-weight: 600;
+            color: #28a745;
+        }
+
+        .over-summary {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 2px;
+        }
+
+        .ball-details {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .ball-details-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .ball-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ball-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .ball-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ball-symbol {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .ball-description {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            font-size: 20px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #667eea;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .input-section {
+                padding: 20px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .input-group input {
+                width: 100%;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .score-display {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .current-players {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .balls-display {
+                gap: 5px;
+            }
+
+            .ball {
+                width: 35px;
+                height: 35px;
+                font-size: 12px;
+            }
+
+            .overs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏏 IPL Live Score</h1>
+            <p>Ball-by-Ball Over View with Live Updates</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <input type="number" id="matchIdInput" placeholder="Enter Match ID (e.g., 1473511)">
+                <button class="btn" onclick="loadLiveScore()">Load Live Score</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="liveScoreContent"></div>
+        </div>
+    </div>
+
+    <script>
+        async function loadLiveScore() {
+            const matchId = document.getElementById('matchIdInput').value;
+            if (!matchId) {
+                alert('Please enter a match ID');
+                return;
+            }
+
+            const content = document.getElementById('liveScoreContent');
+            content.innerHTML = '<div class="loading">Loading live score...</div>';
+
+            try {
+                const response = await fetch(`http://localhost:8000/matches/${matchId}/live-score`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayLiveScore(data);
+                } else {
+                    content.innerHTML = `<div class="error">${data.detail}</div>`;
+                }
+            } catch (error) {
+                content.innerHTML = `<div class="error">Error loading live score: ${error.message}</div>`;
+            }
+        }
+
+        function displayLiveScore(data) {
+            const content = document.getElementById('liveScoreContent');
+
+            let html = `
+                <div class="live-score-card">
+                    <div class="match-title">${data.team1} vs ${data.team2}</div>
+                    
+                    <div class="score-display">
+                        <div class="score-item">
+                            <div class="score-value">${data.current_score}</div>
+                            <div class="score-label">Runs</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value">${data.current_wickets}</div>
+                            <div class="score-label">Wickets</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value">${data.current_overs}</div>
+                            <div class="score-label">Overs</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value">${data.current_run_rate}</div>
+                            <div class="score-label">Run Rate</div>
+                        </div>
+                    </div>
+
+                    <div class="current-players">
+                        <div class="player-info">
+                            <div class="player-label">Batting Team</div>
+                            <div class="player-name">${data.batting_team}</div>
+                        </div>
+                        <div class="player-info">
+                            <div class="player-label">Bowling Team</div>
+                            <div class="player-name">${data.bowling_team}</div>
+                        </div>
+                        <div class="player-info">
+                            <div class="player-label">Current Batsmen</div>
+                            <div class="player-name">${data.current_batsmen.join(', ')}</div>
+                        </div>
+                        <div class="player-info">
+                            <div class="player-label">Current Bowler</div>
+                            <div class="player-name">${data.current_bowler}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="over-view">
+                    <div class="over-title">Over ${data.current_over} - Ball by Ball</div>
+                    
+                    <div class="current-over">
+                        <div class="over-header">
+                            <div class="over-number">Over ${data.current_over}</div>
+                            <div class="over-bowler">Bowling: ${data.current_bowler}</div>
+                        </div>
+                        
+                        <div class="balls-display">
+            `;
+
+            // Display current over balls
+            data.current_over_balls.forEach(ball => {
+                let ballClass = 'dot';
+                if (ball.is_wicket) ballClass = 'wicket';
+                else if (ball.is_wide) ballClass = 'wide';
+                else if (ball.is_no_ball) ballClass = 'no-ball';
+                else if (ball.runs === 4) ballClass = 'four';
+                else if (ball.runs === 6) ballClass = 'six';
+                else if (ball.runs > 0) ballClass = 'runs';
+
+                html += `<div class="ball ${ballClass}">${ball.symbol}</div>`;
+            });
+
+            html += `
+                        </div>
+                    </div>
+
+                    <div class="recent-overs">
+                        <div class="recent-overs-title">Recent Overs</div>
+                        <div class="overs-grid">
+            `;
+
+            // Display recent overs
+            data.recent_overs.forEach(over => {
+                const currentClass = over.is_current ? 'current' : '';
+                html += `
+                    <div class="over-card ${currentClass}">
+                        <div class="over-card-header">
+                            <div class="over-number-small">Over ${over.over}</div>
+                            <div class="over-runs-small">${over.runs} runs</div>
+                        </div>
+                        <div class="over-summary">${over.summary}</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                        </div>
+                    </div>
+
+                    <div class="ball-details">
+                        <div class="ball-details-title">Current Over Details</div>
+                        <div class="ball-list">
+            `;
+
+            // Display ball details
+            data.current_over_balls.forEach(ball => {
+                let ballClass = 'dot';
+                if (ball.is_wicket) ballClass = 'wicket';
+                else if (ball.is_wide) ballClass = 'wide';
+                else if (ball.is_no_ball) ballClass = 'no-ball';
+                else if (ball.runs === 4) ballClass = 'four';
+                else if (ball.runs === 6) ballClass = 'six';
+                else if (ball.runs > 0) ballClass = 'runs';
+
+                let description = '';
+                if (ball.is_wicket) {
+                    description = `Wicket! ${ball.batsman} out`;
+                } else if (ball.is_wide) {
+                    description = `Wide ball, ${ball.runs} run(s)`;
+                } else if (ball.is_no_ball) {
+                    description = `No ball, ${ball.runs} run(s)`;
+                } else if (ball.runs === 0) {
+                    description = `Dot ball`;
+                } else if (ball.runs === 4) {
+                    description = `Four runs by ${ball.batsman}`;
+                } else if (ball.runs === 6) {
+                    description = `Six runs by ${ball.batsman}`;
+                } else {
+                    description = `${ball.runs} run(s) by ${ball.batsman}`;
+                }
+
+                html += `
+                    <div class="ball-item">
+                        <div class="ball-info">
+                            <div class="ball-symbol ${ballClass}">${ball.symbol}</div>
+                            <div class="ball-description">${description}</div>
+                        </div>
+                        <div class="ball-description">Ball ${ball.ball_number}</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            content.innerHTML = html;
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            const matchId = document.getElementById('matchIdInput').value;
+            if (matchId) {
+                loadLiveScore();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

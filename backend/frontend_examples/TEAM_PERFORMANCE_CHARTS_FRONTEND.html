@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Performance Charts - IPL Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .search-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .search-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .chart-card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+            border-bottom: 2px solid #f8f9fa;
+            padding-bottom: 10px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .team-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .team-info h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .team-info p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+
+        .error {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-item .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-item .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .team-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .team-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .team-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .team-card h4 {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .team-card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .search-row {
+                flex-direction: column;
+            }
+            
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Team Performance Charts</h1>
+            <p>Analyze team performance across seasons with comprehensive statistics</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-row">
+                <div class="search-group">
+                    <label for="teamSelect">Select Team:</label>
+                    <select id="teamSelect" onchange="loadTeamCharts()">
+                        <option value="">Choose a team...</option>
+                        <option value="Royal Challengers Bangalore">Royal Challengers Bangalore</option>
+                        <option value="Mumbai Indians">Mumbai Indians</option>
+                        <option value="Chennai Super Kings">Chennai Super Kings</option>
+                        <option value="Kolkata Knight Riders">Kolkata Knight Riders</option>
+                        <option value="Delhi Capitals">Delhi Capitals</option>
+                        <option value="Punjab Kings">Punjab Kings</option>
+                        <option value="Rajasthan Royals">Rajasthan Royals</option>
+                        <option value="Sunrisers Hyderabad">Sunrisers Hyderabad</option>
+                        <option value="Gujarat Titans">Gujarat Titans</option>
+                        <option value="Lucknow Super Giants">Lucknow Super Giants</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <button class="btn" onclick="loadTeamCharts()">📊 Load Team Charts</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="teamInfo" class="team-info" style="display: none;">
+            <h2 id="teamNameDisplay"></h2>
+            <p id="teamStats"></p>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <p>🔄 Loading team data...</p>
+        </div>
+
+        <div id="error" class="error" style="display: none;">
+            <p id="errorMessage"></p>
+        </div>
+
+        <div id="chartsContainer" class="charts-container"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        async function loadTeamCharts() {
+            const teamName = document.getElementById('teamSelect').value;
+            
+            if (!teamName) {
+                showError('Please select a team');
+                return;
+            }
+
+            showLoading();
+            hideError();
+            clearCharts();
+
+            try {
+                const teamData = await fetchTeamData(teamName);
+                if (!teamData || teamData.seasons.length === 0) {
+                    showError('No data found for this team');
+                    return;
+                }
+
+                const charts = [
+                    createWinLossChart(teamData),
+                    createRunsChart(teamData),
+                    createWinPercentageChart(teamData),
+                    createMatchesChart(teamData)
+                ];
+
+                displayCharts(charts);
+                showTeamInfo(teamData);
+
+            } catch (error) {
+                console.error('Error loading charts:', error);
+                showError('Failed to load team data: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function fetchTeamData(teamName) {
+            const response = await fetch(`${API_BASE}/charts/line/team-performance-seasons/${encodeURIComponent(teamName)}`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return await response.json();
+        }
+
+        function createWinLossChart(data) {
+            const ctx = document.createElement('canvas');
+            ctx.id = 'winLossChart';
+            
+            return {
+                title: `${data.team_name} - Wins vs Losses`,
+                canvas: ctx,
+                config: {
+                    type: 'bar',
+                    data: {
+                        labels: data.seasons,
+                        datasets: [
+                            {
+                                label: 'Wins',
+                                data: data.wins,
+                                backgroundColor: 'rgba(46, 204, 113, 0.8)',
+                                borderColor: '#2ecc71',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Losses',
+                                data: data.losses,
+                                backgroundColor: 'rgba(231, 76, 60, 0.8)',
+                                borderColor: '#e74c3c',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Wins vs Losses Over Seasons',
+                                font: { size: 16, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Matches'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Season'
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        function createRunsChart(data) {
+            const ctx = document.createElement('canvas');
+            ctx.id = 'runsChart';
+            
+            return {
+                title: `${data.team_name} - Runs Scored vs Conceded`,
+                canvas: ctx,
+                config: {
+                    type: 'line',
+                    data: {
+                        labels: data.seasons,
+                        datasets: [
+                            {
+                                label: 'Runs Scored',
+                                data: data.runs_scored,
+                                borderColor: '#3498db',
+                                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Runs Conceded',
+                                data: data.runs_conceded,
+                                borderColor: '#e74c3c',
+                                backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Runs Scored vs Conceded Over Seasons',
+                                font: { size: 16, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Runs'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Season'
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        function createWinPercentageChart(data) {
+            const ctx = document.createElement('canvas');
+            ctx.id = 'winPercentageChart';
+            
+            return {
+                title: `${data.team_name} - Win Percentage`,
+                canvas: ctx,
+                config: {
+                    type: 'line',
+                    data: {
+                        labels: data.seasons,
+                        datasets: [{
+                            label: 'Win Percentage',
+                            data: data.win_percentage,
+                            borderColor: '#9b59b6',
+                            backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#9b59b6',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Win Percentage Over Seasons',
+                                font: { size: 16, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'Win Percentage (%)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Season'
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        function createMatchesChart(data) {
+            const ctx = document.createElement('canvas');
+            ctx.id = 'matchesChart';
+            
+            return {
+                title: `${data.team_name} - Matches Played`,
+                canvas: ctx,
+                config: {
+                    type: 'bar',
+                    data: {
+                        labels: data.seasons,
+                        datasets: [{
+                            label: 'Matches Played',
+                            data: data.matches_played,
+                            backgroundColor: 'rgba(52, 73, 94, 0.8)',
+                            borderColor: '#34495e',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Matches Played Over Seasons',
+                                font: { size: 16, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Matches'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Season'
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        function displayCharts(charts) {
+            const container = document.getElementById('chartsContainer');
+            
+            charts.forEach(chart => {
+                const chartCard = document.createElement('div');
+                chartCard.className = 'chart-card';
+                
+                const title = document.createElement('h3');
+                title.textContent = chart.title;
+                chartCard.appendChild(title);
+                
+                const chartContainer = document.createElement('div');
+                chartContainer.className = 'chart-container';
+                chartContainer.appendChild(chart.canvas);
+                chartCard.appendChild(chartContainer);
+                
+                container.appendChild(chartCard);
+                
+                // Create the chart
+                new Chart(chart.canvas, chart.config);
+            });
+        }
+
+        function showTeamInfo(data) {
+            const teamInfo = document.getElementById('teamInfo');
+            const teamNameDisplay = document.getElementById('teamNameDisplay');
+            const teamStats = document.getElementById('teamStats');
+            
+            teamNameDisplay.textContent = data.team_name;
+            
+            // Calculate overall stats
+            const totalSeasons = data.seasons.length;
+            const totalMatches = data.matches_played.reduce((a, b) => a + b, 0);
+            const totalWins = data.wins.reduce((a, b) => a + b, 0);
+            const totalLosses = data.losses.reduce((a, b) => a + b, 0);
+            const overallWinPercentage = totalMatches > 0 ? ((totalWins / totalMatches) * 100).toFixed(1) : 0;
+            const totalRunsScored = data.runs_scored.reduce((a, b) => a + b, 0);
+            const totalRunsConceded = data.runs_conceded.reduce((a, b) => a + b, 0);
+            
+            const statsText = `Seasons: ${totalSeasons} | Total Matches: ${totalMatches} | Wins: ${totalWins} | Losses: ${totalLosses} | Win %: ${overallWinPercentage}% | Runs Scored: ${totalRunsScored} | Runs Conceded: ${totalRunsConceded}`;
+            
+            teamStats.textContent = statsText;
+            teamInfo.style.display = 'block';
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
+        function clearCharts() {
+            document.getElementById('chartsContainer').innerHTML = '';
+            document.getElementById('teamInfo').style.display = 'none';
+        }
+
+        // Load teams on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/teams`);
+                const data = await response.json();
+                
+                const teamSelect = document.getElementById('teamSelect');
+                data.teams.forEach(team => {
+                    const option = document.createElement('option');
+                    option.value = team.team_name;
+                    option.textContent = team.team_name;
+                    teamSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading teams:', error);
+            }
+        });
+    </script>
+</body>
+</html>
