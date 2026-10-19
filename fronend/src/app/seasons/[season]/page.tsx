@@ -285,28 +285,7 @@ export default function SeasonDetailsPage() {
                       {/* Player Info */}
                       <div className="text-center relative z-10">
                         <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center overflow-hidden shadow-lg border-2 border-white">
-                          {img && !img.includes('placeholder') && !img.includes('default') ? (
-                            <img 
-                              key={img}
-                              src={img} 
-                              alt={name} 
-                              width={80} 
-                              height={80} 
-                              loading="eager"
-                              decoding="async"
-                              className="w-full h-full object-cover block" 
-                              onError={() => {
-                                console.log('Player image failed to load:', img);
-                              }}
-                              onLoad={() => {
-                                console.log('Player image loaded successfully:', img);
-                              }}
-                            />
-                          ) : (
-                            <div className="text-gray-600 font-bold text-xl">
-                              {name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
-                            </div>
-                          )}
+                          <AvatarImage src={img} alt={name} width={80} height={80} className="w-full h-full object-cover" />
                         </div>
                         
                         <h4 className="font-bold text-gray-800 text-lg mb-2 group-hover:text-green-600 transition-colors">
@@ -373,28 +352,7 @@ export default function SeasonDetailsPage() {
                       {/* Player Info */}
                       <div className="text-center relative z-10">
                         <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center overflow-hidden shadow-lg border-2 border-white">
-                          {img && !img.includes('placeholder') && !img.includes('default') ? (
-                            <img 
-                              key={img}
-                              src={img} 
-                              alt={name} 
-                              width={80} 
-                              height={80} 
-                              loading="eager"
-                              decoding="async"
-                              className="w-full h-full object-cover block" 
-                              onError={() => {
-                                console.log('Player image failed to load:', img);
-                              }}
-                              onLoad={() => {
-                                console.log('Player image loaded successfully:', img);
-                              }}
-                            />
-                          ) : (
-                            <div className="text-gray-600 font-bold text-xl">
-                              {name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
-                            </div>
-                          )}
+                          <AvatarImage src={img} alt={name} width={80} height={80} className="w-full h-full object-cover" />
                         </div>
                         
                         <h4 className="font-bold text-gray-800 text-lg mb-2 group-hover:text-red-600 transition-colors">

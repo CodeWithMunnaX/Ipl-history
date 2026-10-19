@@ -91,33 +91,7 @@ export default function OverallPage() {
                             {idx + 1}
                           </div>
                           <div className="flex items-center gap-3">
-                            {playerImage && !playerImage.includes('placeholder') && !playerImage.includes('default') ? (
-                              <img 
-                                key={playerImage}
-                                src={playerImage} 
-                                alt={playerName} 
-                                width={48} 
-                                height={48} 
-                                loading="eager"
-                                decoding="async"
-                                className="rounded-full border-2 border-green-300 block" 
-                                onError={() => {
-                                  console.log('Player image failed to load:', playerImage);
-                                }}
-                                onLoad={() => {
-                                  console.log('Player image loaded successfully:', playerImage);
-                                }}
-                              />
-                            ) : (
-                              <AvatarImage 
-                                key={`avatar-${playerImage}`}
-                                src={playerImage} 
-                                alt={playerName} 
-                                width={48} 
-                                height={48} 
-                                className="rounded-full border-2 border-green-300" 
-                              />
-                            )}
+                            <AvatarImage src={playerImage} alt={playerName} width={48} height={48} className="rounded-full border-2 border-green-300" />
                             <div>
                               <div className="font-semibold text-gray-900 text-lg">{playerName}</div>
                             </div>
@@ -154,33 +128,7 @@ export default function OverallPage() {
                             {idx + 1}
                           </div>
                           <div className="flex items-center gap-3">
-                            {playerImage && !playerImage.includes('placeholder') && !playerImage.includes('default') ? (
-                              <img 
-                                key={playerImage}
-                                src={playerImage} 
-                                alt={playerName} 
-                                width={48} 
-                                height={48} 
-                                loading="eager"
-                                decoding="async"
-                                className="rounded-full border-2 border-red-300 block" 
-                                onError={() => {
-                                  console.log('Player image failed to load:', playerImage);
-                                }}
-                                onLoad={() => {
-                                  console.log('Player image loaded successfully:', playerImage);
-                                }}
-                              />
-                            ) : (
-                              <AvatarImage 
-                                key={`avatar-${playerImage}`}
-                                src={playerImage} 
-                                alt={playerName} 
-                                width={48} 
-                                height={48} 
-                                className="rounded-full border-2 border-red-300" 
-                              />
-                            )}
+                            <AvatarImage src={playerImage} alt={playerName} width={48} height={48} className="rounded-full border-2 border-red-300" />
                             <div>
                               <div className="font-semibold text-gray-900 text-lg">{playerName}</div>
                             </div>

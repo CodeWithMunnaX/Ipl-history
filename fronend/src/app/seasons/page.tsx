@@ -296,33 +296,7 @@ export default function SeasonsPage() {
                       <div className="mb-2 flex justify-center">
                         {(() => {
                           const normalizedImg = normalizePlayerImage(player.player_image);
-                          return normalizedImg && !normalizedImg.includes('placeholder') && !normalizedImg.includes('default') ? (
-                            <img 
-                              key={normalizedImg}
-                              src={normalizedImg}
-                              alt={playerName}
-                              width={48}
-                              height={48}
-                              loading="eager"
-                              decoding="async"
-                              className="rounded-full border-2 border-gray-300 block" 
-                              onError={() => {
-                                console.log('Player image failed to load:', player.player_image);
-                              }}
-                            onLoad={() => {
-                              console.log('Player image loaded successfully:', player.player_image);
-                            }}
-                          />
-                        ) : (
-                          <AvatarImage
-                            key={`avatar-${player.player_image}`}
-                            src={normalizedImg}
-                            alt={playerName}
-                            width={48}
-                            height={48}
-                            className="rounded-full border-2 border-gray-300"
-                          />
-                        );
+                          return <AvatarImage src={normalizedImg} alt={playerName} width={48} height={48} className="rounded-full border-2 border-gray-300" />;
                         })()}
                       </div>
                       

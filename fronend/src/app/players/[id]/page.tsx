@@ -255,35 +255,7 @@ export default function PlayerDetailsPage() {
             <div className="flex flex-col md:flex-row items-center gap-6">
               {/* Player Image */}
               <div className="w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center overflow-hidden shadow-lg border-4 border-white">
-                {currentPlayerImage && !currentPlayerImage.includes('placeholder') && !currentPlayerImage.includes('default') ? (
-                  <img 
-                    key={currentPlayerImage}
-                    src={currentPlayerImage} 
-                    alt={playerName} 
-                    width={128} 
-                    height={128} 
-                    loading="eager"
-                    decoding="async"
-                    className="w-full h-full object-cover rounded-full block" 
-                    onError={() => {
-                      console.log('Image failed to load:', currentPlayerImage);
-                      // Fallback to placeholder rendering
-                      setPlayerImage('');
-                    }}
-                    onLoad={() => {
-                      console.log('Image loaded successfully:', currentPlayerImage);
-                    }}
-                  />
-                ) : (
-                  <AvatarImage 
-                    key={`avatar-${currentPlayerImage}`}
-                    src={currentPlayerImage} 
-                    alt={playerName} 
-                    width={128} 
-                    height={128} 
-                    className="w-full h-full object-cover rounded-full" 
-                  />
-                )}
+                <AvatarImage src={currentPlayerImage} alt={playerName} width={128} height={128} className="w-full h-full object-cover rounded-full" />
               </div>
               
               {/* Player Info */}

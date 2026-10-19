@@ -29,32 +29,7 @@ function TopBatsmanCard({ batsman, idx, img, name, runs, teamLogo }: any) {
         {/* Player Image - Mobile: Left, Desktop: Left */}
         <div className="flex-shrink-0">
           <div className="relative h-[150px] w-[150px] sm:h-[180px] sm:w-[180px] lg:h-[200px] lg:w-[200px] xl:h-[220px] xl:w-[220px]">
-            {normalizedImg && !normalizedImg.includes('placeholder') && !normalizedImg.includes('default') ? (
-              <img 
-                key={normalizedImg}
-                src={normalizedImg} 
-                alt={name} 
-                width={200} 
-                height={200} 
-                loading="eager"
-                decoding="async"
-                className="rounded-lg object-contain bg-white border-2 border-green-300 shadow-lg w-full h-full" 
-                onError={() => {
-                  console.log('Player image failed to load:', normalizedImg);
-                }}
-                onLoad={() => {
-                  console.log('Player image loaded successfully:', normalizedImg);
-                }}
-              />
-            ) : (
-              <AvatarImage 
-                src={normalizedImg} 
-                alt={name} 
-                width={200} 
-                height={200} 
-                className="rounded-lg object-contain bg-white border-2 border-green-300 shadow-lg w-full h-full" 
-              />
-            )}
+            <AvatarImage src={normalizedImg} alt={name} width={200} height={200} className="rounded-lg object-contain bg-white border-2 border-green-300 shadow-lg w-full h-full" />
             <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 bg-green-500 text-white text-sm sm:text-base lg:text-lg px-2 py-1 sm:px-4 sm:py-2 rounded-full font-bold shadow-lg">
               #{idx + 1}
             </div>
@@ -465,32 +440,7 @@ export default function Home() {
                       {/* Player Image - Mobile: Left, Desktop: Left */}
                       <div className="flex-shrink-0">
                         <div className="relative h-[150px] w-[150px] sm:h-[180px] sm:w-[180px] lg:h-[200px] lg:w-[200px] xl:h-[220px] xl:w-[220px]">
-                          {img && !img.includes('placeholder') && !img.includes('default') ? (
-                            <img 
-                              key={img}
-                              src={img} 
-                              alt={name} 
-                              width={200} 
-                              height={200} 
-                              loading="eager"
-                              decoding="async"
-                              className="rounded-lg object-contain bg-white border-2 border-green-300 shadow-lg w-full h-full" 
-                              onError={() => {
-                                console.log('Bowler image failed to load:', img);
-                              }}
-                              onLoad={() => {
-                                console.log('Bowler image loaded successfully:', img);
-                              }}
-                            />
-                          ) : (
-                            <AvatarImage 
-                              src={img} 
-                              alt={name} 
-                              width={200} 
-                              height={200} 
-                              className="rounded-lg object-contain bg-white border-2 border-green-300 shadow-lg w-full h-full" 
-                            />
-                          )}
+                          <AvatarImage src={img} alt={name} width={200} height={200} className="rounded-lg object-contain bg-white border-2 border-green-300 shadow-lg w-full h-full" />
                           <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 bg-green-500 text-white text-sm sm:text-base lg:text-lg px-2 py-1 sm:px-4 sm:py-2 rounded-full font-bold shadow-lg">
                             #{idx + 1}
                           </div>

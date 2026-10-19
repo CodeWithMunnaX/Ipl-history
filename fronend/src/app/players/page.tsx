@@ -96,33 +96,7 @@ export default function PlayersPage() {
                   <div className="text-center relative z-10">
                     {/* Player Image */}
                     <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center overflow-hidden shadow-lg border-2 border-white">
-                      {playerImage && !playerImage.includes('placeholder') && !playerImage.includes('default') ? (
-                        <img 
-                          key={playerImage}
-                          src={playerImage} 
-                          alt={playerName} 
-                          width={80} 
-                          height={80} 
-                          loading="eager"
-                          decoding="async"
-                          className="w-full h-full object-cover rounded-full block" 
-                          onError={() => {
-                            console.log('Player image failed to load:', playerImage);
-                          }}
-                          onLoad={() => {
-                            console.log('Player image loaded successfully:', playerImage);
-                          }}
-                        />
-                      ) : (
-                        <AvatarImage 
-                          key={`avatar-${playerImage}`}
-                          src={playerImage} 
-                          alt={playerName} 
-                          width={80} 
-                          height={80} 
-                          className="w-full h-full object-cover rounded-full" 
-                        />
-                      )}
+                      <AvatarImage src={playerImage} alt={playerName} width={80} height={80} className="w-full h-full object-cover rounded-full" />
                     </div>
                     
                     {/* Player Name */}

@@ -1,6 +1,6 @@
 ﻿from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse, Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 import pandas as pd
 import numpy as np
@@ -3931,7 +3931,9 @@ async def get_player_avatar(player_id: int):
         
         # Check if image exists
         if player_image and player_image.strip():
-            image_path = player_image.lstrip('/')
+            # Stored as "player_x.jpg" or "/player_images/player_x.jpg"
+            filename = os.path.basename(player_image.strip())
+            image_path = os.path.join(UPLOAD_DIR, filename)
             if os.path.exists(image_path):
                 return FileResponse(image_path)
         
