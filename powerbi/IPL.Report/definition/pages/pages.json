@@ -3,7 +3,8 @@
   "pageOrder": [
     "Overview",
     "Players",
-    "TeamsVenues"
+    "Teams",
+    "Insights"
   ],
   "activePageName": "Overview"
 }

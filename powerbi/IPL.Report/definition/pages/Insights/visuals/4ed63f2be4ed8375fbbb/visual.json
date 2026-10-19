@@ -1,0 +1,208 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "4ed63f2be4ed8375fbbb",
+  "position": {
+    "x": 612,
+    "y": 10,
+    "z": 1000,
+    "height": 58,
+    "width": 430
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Made by ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#64748B"
+                    }
+                  },
+                  {
+                    "value": "CodeWithMunnaX",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#0B1E4D",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "right"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Portfolio",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1D4ED8",
+                      "fontWeight": "bold",
+                      "textDecoration": "underline"
+                    },
+                    "url": "https://codewithmunnax.com"
+                  },
+                  {
+                    "value": "  ·  ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#94A3B8"
+                    }
+                  },
+                  {
+                    "value": "GitHub",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1D4ED8",
+                      "fontWeight": "bold",
+                      "textDecoration": "underline"
+                    },
+                    "url": "https://github.com/CodeWithMunnaX"
+                  },
+                  {
+                    "value": "  ·  ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#94A3B8"
+                    }
+                  },
+                  {
+                    "value": "LinkedIn",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1D4ED8",
+                      "fontWeight": "bold",
+                      "textDecoration": "underline"
+                    },
+                    "url": "https://www.linkedin.com/in/munna-kumar-93234b241"
+                  },
+                  {
+                    "value": "  ·  ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#94A3B8"
+                    }
+                  },
+                  {
+                    "value": "YouTube",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1D4ED8",
+                      "fontWeight": "bold",
+                      "textDecoration": "underline"
+                    },
+                    "url": "https://www.youtube.com/@CodeWithMunnaX"
+                  },
+                  {
+                    "value": "  ·  ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#94A3B8"
+                    }
+                  },
+                  {
+                    "value": "Instagram",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1D4ED8",
+                      "fontWeight": "bold",
+                      "textDecoration": "underline"
+                    },
+                    "url": "https://www.instagram.com/codewithmunnax"
+                  }
+                ],
+                "horizontalTextAlignment": "right"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

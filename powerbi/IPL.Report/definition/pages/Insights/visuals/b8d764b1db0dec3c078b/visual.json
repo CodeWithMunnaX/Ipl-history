@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b8d764b1db0dec3c078b",
+  "position": {
+    "x": 1128,
+    "y": 360,
+    "z": 8000,
+    "height": 140,
+    "width": 136
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Chasing Win %"
+                }
+              },
+              "queryRef": "Metrics.Chasing Win %",
+              "displayName": "Chasers won"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

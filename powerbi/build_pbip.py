@@ -21,11 +21,14 @@ import subprocess
 
 import pandas as pd
 
+import images
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 DB = os.path.join(HERE, "..", "backend", "ipl_data.db")
 DATA = os.path.join(HERE, "data")
 
 BASE_THEME = "CY24SU10"
+CUSTOM_THEME = "IPLTheme"
 
 def stable_id(*parts) -> str:
     """Deterministic ids keep rebuilds byte-identical, so Power BI and git see no spurious changes."""
@@ -116,18 +119,50 @@ def export_data():
         "player_out": d["player_out"],
     })
 
+    print("  fetching team logos ...")
     teams = pd.read_sql_query("SELECT team_name AS team, team_name_short AS short_name, image_url AS logo FROM teams", con)
     teams = teams[teams["team"].isin(team_matches["team"])].drop_duplicates("team")
+    teams["logo"] = [images.team_logo(t.team, t.short_name, t.logo) for t in teams.itertuples()]
+    logo_of = dict(zip(teams["team"], teams["logo"]))
+    champions["champion_logo"] = champions["champion"].map(logo_of)
     seasons = pd.DataFrame({"season": sorted(matches["season"].unique())})
+    players = build_players(con, deliveries, matches)
 
     out = {
         "matches": matches, "deliveries": deliveries, "team_matches": team_matches,
-        "teams": teams, "seasons": seasons, "champions": champions,
+        "teams": teams, "seasons": seasons, "champions": champions, "players": players,
     }
     for name, df in out.items():
         df.to_csv(os.path.join(DATA, f"{name}.csv"), index=False, encoding="utf-8")
         print(f"  {name}.csv  {len(df):>7} rows")
     return out
+
+
+def build_players(con, deliveries, matches):
+    """One row per batter/bowler with an embedded photo (see images.py)."""
+    season_of = matches.set_index("match_id")["season"]
+    d = deliveries.assign(season=deliveries["match_id"].map(season_of))
+    # Real photos are looked up for anyone who can appear in a top-10 list
+    featured = set()
+    for who, value in (("batter", "batter_runs"), ("bowler", "bowler_wicket")):
+        featured |= set(d.groupby(who)[value].sum().nlargest(10).index)
+        per_season = d.groupby(["season", who])[value].sum().reset_index()
+        featured |= set(per_season.sort_values(value, ascending=False).groupby("season").head(10)[who])
+
+    db = pd.read_sql_query("SELECT player_name, player_full_name, player_image FROM players", con)
+    db = db.drop_duplicates("player_name").set_index("player_name")
+    names = sorted(set(d["batter"]) | set(d["bowler"]))
+    print(f"  fetching photos for {len(featured)} featured players ...")
+    rows, sources = [], {}
+    for n in names:
+        full = db["player_full_name"].get(n) if n in db.index else None
+        stored = db["player_image"].get(n) if n in db.index else None
+        photo, src = images.player_photo(n, full if isinstance(full, str) else n,
+                                         stored if isinstance(stored, str) else None, n in featured)
+        sources[src] = sources.get(src, 0) + 1
+        rows.append({"player": n, "full_name": full if isinstance(full, str) else n, "photo": photo, "photo_source": src})
+    print("  photo sources:", sources)
+    return pd.DataFrame(rows)
 
 
 # ---------------------------------------------------------------------------
@@ -137,7 +172,7 @@ def export_data():
 M_TYPES = {"int64": "Int64.Type", "double": "type number", "string": "type text", "dateTime": "type date"}
 
 
-def csv_table(name, file, columns, hidden=(), sort_by=None):
+def csv_table(name, file, columns, hidden=(), sort_by=None, images_cols=()):
     """columns: list of (name, dataType)."""
     typed = ", ".join(f'{{"{c}", {M_TYPES[t]}}}' for c, t in columns)
     m = [
@@ -155,6 +190,8 @@ def csv_table(name, file, columns, hidden=(), sort_by=None):
             col["formatString"] = "dd mmm yyyy"
         if c in hidden:
             col["isHidden"] = True
+        if c in images_cols:
+            col["dataCategory"] = "ImageUrl"
         if sort_by and c in sort_by:
             col["sortByColumn"] = sort_by[c]
         cols.append(col)
@@ -219,7 +256,31 @@ MEASURES = [
     ("Chose to Field %",
      "DIVIDE(CALCULATE(COUNTROWS(Matches), Matches[toss_decision] = \"field\"), COUNTROWS(Matches))", "0.0%"),
     ("Chasing Win %", "DIVIDE(SUM(Matches[chasing_team_won]), [Matches with Result])", "0.0%"),
+    ("Team Titles", "CALCULATE(COUNTROWS(Champions), TREATAS(VALUES(Teams[team]), Champions[champion]))", "0"),
+    # Photos (dataCategory ImageUrl so visuals render them)
+    ("Batter Photo",
+     "IF([Batter Rank] <= 10, LOOKUPVALUE(Players[photo], Players[player], SELECTEDVALUE(Deliveries[batter])))", None, "ImageUrl"),
+    ("Bowler Photo",
+     "IF([Bowler Rank] <= 10, LOOKUPVALUE(Players[photo], Players[player], SELECTEDVALUE(Deliveries[bowler])))", None, "ImageUrl"),
+    ("Orange Cap Photo",
+     "IF([Batter Rank] = 1, LOOKUPVALUE(Players[photo], Players[player], SELECTEDVALUE(Deliveries[batter])))", None, "ImageUrl"),
+    ("Orange Cap Runs", "IF([Batter Rank] = 1, [Batter Runs])", "#,0"),
+    ("Orange Cap SR", "IF([Batter Rank] = 1, [Strike Rate])", "0.0"),
+    ("Purple Cap Photo",
+     "IF([Bowler Rank] = 1, LOOKUPVALUE(Players[photo], Players[player], SELECTEDVALUE(Deliveries[bowler])))", None, "ImageUrl"),
+    ("Purple Cap Wickets", "IF([Bowler Rank] = 1, [Bowler Wickets])", "#,0"),
+    ("Purple Cap Economy", "IF([Bowler Rank] = 1, [Economy])", "0.00"),
 ]
+
+
+def measure_def(m):
+    name, expr, fmt = m[:3]
+    out = {"name": name, "expression": expr}
+    if fmt:
+        out["formatString"] = fmt
+    if len(m) > 3:
+        out["dataCategory"] = m[3]
+    return out
 
 
 def build_model():
@@ -244,18 +305,21 @@ def build_model():
             ("match_id", "int64"), ("team", "string"), ("opponent", "string"),
             ("won", "int64"), ("lost", "int64"), ("no_result_or_tie", "int64"),
         ]),
-        csv_table("Teams", "teams.csv", [("team", "string"), ("short_name", "string"), ("logo", "string")]),
+        csv_table("Teams", "teams.csv", [("team", "string"), ("short_name", "string"), ("logo", "string")],
+                  images_cols=("logo",)),
         csv_table("Champions", "champions.csv", [
             ("season", "int64"), ("champion", "string"), ("runner_up", "string"), ("final_venue", "string"),
-        ]),
+            ("champion_logo", "string"),
+        ], images_cols=("champion_logo",)),
+        csv_table("Players", "players.csv", [
+            ("player", "string"), ("full_name", "string"), ("photo", "string"), ("photo_source", "string"),
+        ], hidden=("photo_source",), images_cols=("photo",)),
         {
             "name": "Metrics",
             "columns": [{"name": "Dummy", "dataType": "string", "sourceColumn": "Dummy", "isHidden": True}],
             "partitions": [{"name": "Metrics", "mode": "import", "source": {
                 "type": "m", "expression": ["let", "    Source = #table(type table [Dummy = text], {})", "in", "    Source"]}}],
-            "measures": [
-                {"name": n, "expression": e, "formatString": f} for n, e, f in MEASURES
-            ],
+            "measures": [measure_def(m) for m in MEASURES],
         },
     ]
     rel = lambda ft, fc, tt, tc: {"name": stable_id(ft, fc, tt, tc), "fromTable": ft, "fromColumn": fc, "toTable": tt, "toColumn": tc}
@@ -280,7 +344,7 @@ def build_model():
                 "expression": f'"{DATA}" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]',
             }],
             "annotations": [{"name": "PBI_QueryOrder", "value": json.dumps(
-                ["DataFolder", "Seasons", "Matches", "Deliveries", "TeamMatches", "Teams", "Champions", "Metrics"])}],
+                ["DataFolder", "Seasons", "Matches", "Deliveries", "TeamMatches", "Teams", "Champions", "Players", "Metrics"])}],
         },
     }
 
@@ -336,8 +400,6 @@ class Visual:
         if self.title:
             vc["title"] = [{"properties": {"show": lit("true"), "text": lit(f"'{self.title}'"),
                                            "fontSize": lit("12D")}}]
-        vc["dropShadow"] = [{"properties": {"show": lit("true")}}]
-        vc["border"] = [{"properties": {"show": lit("false")}}]
         single = {
             "visualType": self.vtype,
             "projections": self.projections,
@@ -357,112 +419,245 @@ class Visual:
         return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
 
 
-def text_box(x, y, w, h, text, size="20pt", color="#252423", bold=True):
+AUTHOR = "CodeWithMunnaX"
+# Shown as clickable links in every page header. Add more as "Label": "https://..."
+# (e.g. "Portfolio", "LinkedIn", "Instagram", "YouTube"); empty values are skipped.
+SOCIAL_LINKS = {
+    "Portfolio": "https://codewithmunnax.com",
+    "GitHub": "https://github.com/CodeWithMunnaX",
+    "LinkedIn": "https://www.linkedin.com/in/munna-kumar-93234b241",
+    "YouTube": "https://www.youtube.com/@CodeWithMunnaX",
+    "Instagram": "https://www.instagram.com/codewithmunnax",
+}
+
+NAVY = "#0B1E4D"
+ORANGE = "#F97316"
+PURPLE = "#7C3AED"
+CANVAS = "#EEF2F7"
+
+THEME = {
+    "name": "IPL Theme",
+    "dataColors": ["#1D4ED8", "#F97316", "#10B981", "#7C3AED", "#EAB308", "#EC4899", "#0EA5E9", "#EF4444"],
+    "background": "#FFFFFF",
+    "foreground": "#0F172A",
+    "tableAccent": NAVY,
+    "textClasses": {
+        "callout": {"fontSize": 24, "fontFace": "Segoe UI Semibold", "color": NAVY},
+        "title": {"fontSize": 12, "fontFace": "Segoe UI Semibold", "color": NAVY},
+        "header": {"fontSize": 11, "fontFace": "Segoe UI Semibold", "color": NAVY},
+        "label": {"fontSize": 10, "fontFace": "Segoe UI", "color": "#475569"},
+    },
+    "visualStyles": {
+        "*": {"*": {
+            "background": [{"show": True, "color": {"solid": {"color": "#FFFFFF"}}, "transparency": 0}],
+            "border": [{"show": True, "color": {"solid": {"color": "#E2E8F0"}}, "radius": 12}],
+            "dropShadow": [{"show": False}],
+            "title": [{"show": True, "fontColor": {"solid": {"color": NAVY}}, "fontSize": 12, "bold": True}],
+            "padding": [{"top": 10, "bottom": 10, "left": 12, "right": 12}],
+        }},
+        "page": {"*": {"background": [{"color": {"solid": {"color": CANVAS}}, "transparency": 0}]}},
+        "card": {"*": {
+            "labels": [{"color": {"solid": {"color": NAVY}}, "fontSize": 22}],
+            "categoryLabels": [{"color": {"solid": {"color": "#64748B"}}, "fontSize": 10}],
+        }},
+        "tableEx": {"*": {
+            "columnHeaders": [{"fontColor": {"solid": {"color": "#FFFFFF"}}, "backColor": {"solid": {"color": NAVY}},
+                               "bold": True, "fontSize": 11}],
+            "values": [{"fontColorPrimary": {"solid": {"color": "#0F172A"}}, "backColorPrimary": {"solid": {"color": "#FFFFFF"}},
+                        "fontColorSecondary": {"solid": {"color": "#0F172A"}}, "backColorSecondary": {"solid": {"color": "#F8FAFC"}},
+                        "fontSize": 11}],
+            "grid": [{"gridHorizontal": True, "gridHorizontalColor": {"solid": {"color": "#E2E8F0"}},
+                      "gridVertical": False, "rowPadding": 4}],
+        }},
+        "slicer": {"*": {"header": [{"fontColor": {"solid": {"color": NAVY}}, "bold": True}]}},
+    },
+}
+
+
+def text_box(x, y, w, h, runs, background=None, z=0, name=""):
+    """runs: list of (text, size, color, bold) rendered as one paragraph per item."""
+    vc = {"border": [{"properties": {"show": lit("false")}}],
+          "padding": [{"properties": {"top": lit("6D"), "bottom": lit("4D"), "left": lit("16D"), "right": lit("8D")}}]}
+    if background:
+        vc["background"] = [{"properties": {"show": lit("true"), "color": {"solid": {"color": lit(f"'{background}'")}},
+                                            "transparency": lit("0D")}}]
     config = {
-        "name": stable_id("textbox", x, y, text),
-        "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": 0, "width": w, "height": h}}],
+        "name": stable_id("textbox", name, x, y, *[t for t, *_ in runs]),
+        "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": w, "height": h}}],
         "singleVisual": {
             "visualType": "textbox", "drillFilterOtherVisuals": True,
-            "objects": {"general": [{"properties": {"paragraphs": [{"textRuns": [{
-                "value": text, "textStyle": {"fontWeight": "bold" if bold else "normal", "fontSize": size, "color": color}
-            }]}]}}]},
+            "objects": {"general": [{"properties": {"paragraphs": [
+                {"textRuns": [{"value": t, "textStyle": {"fontWeight": "bold" if b else "normal",
+                                                         "fontSize": size, "color": color}}]}
+                for t, size, color, b in runs
+            ]}}]},
+            "vcObjects": vc,
         },
     }
-    return {"x": x, "y": y, "z": 0, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
+    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
 
 
-def season_slicer(x, y, w, h):
+def credit_box(x, y, w, h, name):
+    """'Made by' line plus a row of hyperlinks, right-aligned in the header."""
+    links = [(label, url) for label, url in SOCIAL_LINKS.items() if url]
+    link_runs = []
+    for i, (label, url) in enumerate(links):
+        if i:
+            link_runs.append({"value": "  ·  ", "textStyle": {"fontSize": "10pt", "color": "#94A3B8"}})
+        link_runs.append({"value": label, "url": url,
+                          "textStyle": {"fontSize": "10pt", "color": "#1D4ED8", "fontWeight": "bold",
+                                        "textDecoration": "underline"}})
+    paragraphs = [
+        {"horizontalTextAlignment": "right", "textRuns": [
+            {"value": "Made by ", "textStyle": {"fontSize": "10pt", "color": "#64748B"}},
+            {"value": AUTHOR, "textStyle": {"fontSize": "12pt", "color": NAVY, "fontWeight": "bold"}},
+        ]},
+        {"horizontalTextAlignment": "right", "textRuns": link_runs or [{"value": " ", "textStyle": {}}]},
+    ]
+    config = {
+        "name": stable_id("credits", name),
+        "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": 1, "width": w, "height": h}}],
+        "singleVisual": {
+            "visualType": "textbox", "drillFilterOtherVisuals": True,
+            "objects": {"general": [{"properties": {"paragraphs": paragraphs}}]},
+            "vcObjects": {"border": [{"properties": {"show": lit("false")}}],
+                          "padding": [{"properties": {"top": lit("4D"), "bottom": lit("2D"),
+                                                      "left": lit("8D"), "right": lit("12D")}}],
+                          "background": [{"properties": {"show": lit("true"),
+                                                         "color": {"solid": {"color": lit("'#FFFFFF'")}},
+                                                         "transparency": lit("0D")}}]},
+        },
+    }
+    return {"x": x, "y": y, "z": 1, "width": w, "height": h, "config": json.dumps(config), "filters": "[]"}
+
+
+def season_slicer(x=1054, y=8, w=210, h=62):
     v = Visual("slicer", x, y, w, h).col("Values", "Seasons", "season", "Season")
     v.objects = {"data": [{"properties": {"mode": lit("'Dropdown'")}}],
                  "general": [{"properties": {"orientation": lit("0D")}}]}
     return v
 
 
-def card(x, y, w, h, measure):
-    v = Visual("card", x, y, w, h).mea("Values", measure)
-    v.objects = {"labels": [{"properties": {"fontSize": lit("24D")}}]}
+def card(x, y, w, h, measure, label=None):
+    return Visual("card", x, y, w, h).mea("Values", measure, label)
+
+
+def photo_table(x, y, w, h, title, image_h):
+    v = Visual("tableEx", x, y, w, h, title)
+    v.objects["grid"] = [{"properties": {"imageHeight": lit(f"{image_h}D")}}]
     return v
 
 
-def page(name, display, visuals, header):
-    containers = [text_box(16, 8, 900, 44, header)]
+def page(name, display, visuals, subtitle):
+    containers = [
+        text_box(0, 0, 1280, 76, [
+            ("IPL ANALYTICS", "18pt", "#FFFFFF", True),
+            (subtitle, "10pt", "#CBD5E1", False),
+        ], background=NAVY, name=name),
+        credit_box(612, 10, 430, 58, name),
+    ]
     containers += [v.to_container((i + 1) * 1000, name) for i, v in enumerate(visuals)]
     return {
         "name": name, "displayName": display, "displayOption": 1, "width": 1280, "height": 720,
-        "config": json.dumps({"objects": {"background": [{"properties": {"color": {"solid": {"color": lit("'#F3F2F1'")}},
-                                                                          "transparency": lit("0D")}}]}}),
+        "config": json.dumps({"objects": {"background": [{"properties": {
+            "color": {"solid": {"color": lit(f"'{CANVAS}'")}}, "transparency": lit("0D")}}]}}),
         "filters": "[]", "visualContainers": containers,
     }
 
 
 def build_report():
-    kpis = ["Matches", "Total Runs", "Wickets", "Run Rate", "Sixes", "Fours", "Avg 1st Innings", "Highest Total"]
-    overview = [season_slicer(1040, 4, 224, 68)]
-    overview += [card(16 + i * 156, 80, 148, 96, m) for i, m in enumerate(kpis)]
+    kpis = [("Matches", None), ("Total Runs", None), ("Wickets", None), ("Run Rate", None),
+            ("Sixes", None), ("Fours", None), ("Avg 1st Innings", "Avg 1st innings"), ("Highest Total", "Highest total")]
+    overview = [season_slicer()]
+    overview += [card(16 + i * 157, 88, 149, 84, m, label) for i, (m, label) in enumerate(kpis)]
     overview += [
-        Visual("lineChart", 16, 188, 620, 256, "Runs per match by season")
-        .col("Category", "Seasons", "season", "Season").mea("Y", "Runs per Match").sort("Column", "Seasons", "season", desc=False),
-        Visual("clusteredColumnChart", 644, 188, 620, 256, "Sixes per match by season")
-        .col("Category", "Seasons", "season", "Season").mea("Y", "Sixes per Match").sort("Column", "Seasons", "season", desc=False),
-        Visual("clusteredBarChart", 16, 456, 620, 252, "Team win %")
-        .col("Category", "Teams", "team", "Team").mea("Y", "Win %").sort("Measure", "Metrics", "Win %"),
-        Visual("clusteredBarChart", 644, 456, 620, 252, "How batters got out")
-        .col("Category", "Deliveries", "wicket_kind", "Dismissal").mea("Y", "Wickets").sort("Measure", "Metrics", "Wickets"),
+        photo_table(16, 184, 304, 252, "🟠 Orange Cap · most runs", 112)
+        .mea("Values", "Orange Cap Photo", "Photo").col("Values", "Deliveries", "batter", "Batter")
+        .mea("Values", "Orange Cap Runs", "Runs").mea("Values", "Orange Cap SR", "SR")
+        .sort("Measure", "Metrics", "Orange Cap Runs"),
+        photo_table(328, 184, 304, 252, "🟣 Purple Cap · most wickets", 112)
+        .mea("Values", "Purple Cap Photo", "Photo").col("Values", "Deliveries", "bowler", "Bowler")
+        .mea("Values", "Purple Cap Wickets", "Wkts").mea("Values", "Purple Cap Economy", "Econ")
+        .sort("Measure", "Metrics", "Purple Cap Wickets"),
+        Visual("lineChart", 640, 184, 624, 252, "Runs per match by season")
+        .col("Category", "Seasons", "season", "Season").mea("Y", "Runs per Match", "Runs per match")
+        .sort("Column", "Seasons", "season", desc=False),
+        photo_table(16, 448, 620, 260, "Team standings", 28)
+        .col("Values", "Teams", "logo", "Logo").col("Values", "Teams", "team", "Team").mea("Values", "Played")
+        .mea("Values", "Won").mea("Values", "Win %").mea("Values", "Team Titles", "Titles")
+        .sort("Measure", "Metrics", "Win %"),
+        Visual("clusteredColumnChart", 644, 448, 620, 260, "Sixes per match by season")
+        .col("Category", "Seasons", "season", "Season").mea("Y", "Sixes per Match", "Sixes per match")
+        .sort("Column", "Seasons", "season", desc=False),
     ]
 
-    players = [season_slicer(1040, 4, 224, 68)]
+    players = [season_slicer()]
     players += [
-        Visual("clusteredBarChart", 16, 80, 620, 300, "Top 10 run scorers")
-        .col("Category", "Deliveries", "batter", "Batter").mea("Y", "Top 10 Runs", "Runs").sort("Measure", "Metrics", "Top 10 Runs"),
-        Visual("clusteredBarChart", 644, 80, 620, 300, "Top 10 wicket takers (run outs not credited)")
-        .col("Category", "Deliveries", "bowler", "Bowler").mea("Y", "Top 10 Wickets", "Wickets").sort("Measure", "Metrics", "Top 10 Wickets"),
-        Visual("tableEx", 16, 392, 620, 316, "Batting")
-        .col("Values", "Deliveries", "batter", "Batter").mea("Values", "Top 10 Bat Matches", "Matches")
-        .mea("Values", "Top 10 Runs", "Runs").mea("Values", "Top 10 Strike Rate", "Strike rate")
-        .mea("Values", "Top 10 Fours", "4s").mea("Values", "Top 10 Sixes", "6s")
+        photo_table(16, 88, 620, 620, "🏏 Top 10 batters", 46)
+        .mea("Values", "Batter Photo", "Photo").col("Values", "Deliveries", "batter", "Batter")
+        .mea("Values", "Top 10 Bat Matches", "Mat").mea("Values", "Top 10 Runs", "Runs")
+        .mea("Values", "Top 10 Strike Rate", "SR").mea("Values", "Top 10 Fours", "4s").mea("Values", "Top 10 Sixes", "6s")
         .sort("Measure", "Metrics", "Top 10 Runs"),
-        Visual("tableEx", 644, 392, 620, 316, "Bowling")
-        .col("Values", "Deliveries", "bowler", "Bowler").mea("Values", "Top 10 Bowl Matches", "Matches")
-        .mea("Values", "Top 10 Wickets", "Wickets").mea("Values", "Top 10 Economy", "Economy")
-        .mea("Values", "Top 10 Dots", "Dot balls")
+        photo_table(644, 88, 620, 620, "🎯 Top 10 bowlers · run outs not credited", 46)
+        .mea("Values", "Bowler Photo", "Photo").col("Values", "Deliveries", "bowler", "Bowler")
+        .mea("Values", "Top 10 Bowl Matches", "Mat").mea("Values", "Top 10 Wickets", "Wkts")
+        .mea("Values", "Top 10 Economy", "Econ").mea("Values", "Top 10 Dots", "Dots")
         .sort("Measure", "Metrics", "Top 10 Wickets"),
     ]
 
-    teams = [season_slicer(1040, 4, 224, 68)]
+    teams = [season_slicer()]
     teams += [
-        Visual("tableEx", 16, 80, 500, 360, "Points table")
-        .col("Values", "Teams", "team", "Team").mea("Values", "Played").mea("Values", "Won").mea("Values", "Lost")
-        .mea("Values", "Tie / NR").mea("Values", "Win %").sort("Measure", "Metrics", "Win %"),
-        Visual("clusteredColumnChart", 524, 80, 740, 210, "Average runs per over (per innings)")
-        .col("Category", "Deliveries", "over", "Over").mea("Y", "Avg Runs per Over").sort("Column", "Deliveries", "over", desc=False),
-        Visual("tableEx", 524, 298, 400, 142, "Match phases")
-        .col("Values", "Deliveries", "phase", "Phase").mea("Values", "Run Rate").mea("Values", "Wickets per Innings")
-        .sort("Column", "Deliveries", "phase", desc=False),
-        Visual("multiRowCard", 932, 298, 332, 142, "Toss & chasing")
-        .mea("Values", "Toss Winner Won %", "Toss winner won").mea("Values", "Chose to Field %", "Chose to field")
-        .mea("Values", "Chasing Win %", "Chasing team won"),
-        Visual("tableEx", 16, 452, 500, 256, "Champions")
-        .col("Values", "Champions", "season", "Season").col("Values", "Champions", "champion", "Champion")
-        .col("Values", "Champions", "runner_up", "Runner-up")
+        photo_table(16, 88, 620, 400, "Points table", 30)
+        .col("Values", "Teams", "logo", "Logo").col("Values", "Teams", "team", "Team").mea("Values", "Played", "P")
+        .mea("Values", "Won", "W").mea("Values", "Lost", "L").mea("Values", "Tie / NR", "T/NR").mea("Values", "Win %")
+        .sort("Measure", "Metrics", "Win %"),
+        photo_table(644, 88, 620, 400, "🏆 Champions", 30)
+        .col("Values", "Champions", "season", "Season").col("Values", "Champions", "champion_logo", "Logo")
+        .col("Values", "Champions", "champion", "Champion").col("Values", "Champions", "runner_up", "Runner-up")
         .sort("Column", "Champions", "season"),
-        Visual("tableEx", 524, 452, 740, 256, "Venues")
+        Visual("clusteredBarChart", 16, 500, 620, 208, "Titles won")
+        .col("Category", "Champions", "champion", "Team").mea("Y", "Titles").sort("Measure", "Metrics", "Titles"),
+        Visual("clusteredBarChart", 644, 500, 620, 208, "Win %")
+        .col("Category", "Teams", "team", "Team").mea("Y", "Win %").sort("Measure", "Metrics", "Win %"),
+    ]
+
+    insights = [season_slicer()]
+    insights += [
+        Visual("clusteredColumnChart", 16, 88, 820, 260, "Average runs per over (per innings)")
+        .col("Category", "Deliveries", "over", "Over").mea("Y", "Avg Runs per Over", "Avg runs")
+        .sort("Column", "Deliveries", "over", desc=False),
+        Visual("tableEx", 844, 88, 420, 260, "Match phases")
+        .col("Values", "Deliveries", "phase", "Phase").mea("Values", "Run Rate", "Run rate")
+        .mea("Values", "Wickets per Innings", "Wkts / inns").sort("Column", "Deliveries", "phase", desc=False),
+        Visual("tableEx", 16, 360, 820, 348, "Venues")
         .col("Values", "Matches", "venue", "Venue").col("Values", "Matches", "city", "City").mea("Values", "Matches")
-        .mea("Values", "Avg 1st Innings").sort("Measure", "Metrics", "Matches"),
+        .mea("Values", "Avg 1st Innings", "Avg 1st inns").sort("Measure", "Metrics", "Matches"),
+        card(844, 360, 136, 140, "Toss Winner Won %", "Toss → won"),
+        card(986, 360, 136, 140, "Chose to Field %", "Fielded first"),
+        card(1128, 360, 136, 140, "Chasing Win %", "Chasers won"),
+        Visual("clusteredBarChart", 844, 508, 420, 200, "How batters got out")
+        .col("Category", "Deliveries", "wicket_kind", "Dismissal").mea("Y", "Wickets").sort("Measure", "Metrics", "Wickets"),
     ]
 
     return {
         "config": json.dumps({"version": "5.43", "activeSectionIndex": 0, "defaultDrillFilterOtherVisuals": True,
-                              "themeCollection": {"baseTheme": {"name": BASE_THEME, "version": "5.61", "type": 2}},
+                              "themeCollection": {
+                                  "baseTheme": {"name": BASE_THEME, "version": "5.61", "type": 2},
+                                  "customTheme": {"name": CUSTOM_THEME, "version": "5.61", "type": 1},
+                              },
                               "settings": {"useStylableVisualContainerHeader": True}}),
         "layoutOptimization": 0,
-        "resourcePackages": [{"resourcePackage": {
-            "name": "SharedResources", "type": 2, "disabled": False,
-            "items": [{"type": 202, "path": f"BaseThemes/{BASE_THEME}.json", "name": BASE_THEME}],
-        }}],
+        "resourcePackages": [
+            {"resourcePackage": {"name": "SharedResources", "type": 2, "disabled": False,
+                                 "items": [{"type": 202, "path": f"BaseThemes/{BASE_THEME}.json", "name": BASE_THEME}]}},
+            {"resourcePackage": {"name": "RegisteredResources", "type": 1, "disabled": False,
+                                 "items": [{"type": 202, "path": f"{CUSTOM_THEME}.json", "name": CUSTOM_THEME}]}},
+        ],
         "sections": [
-            page("Overview", "Overview", overview, "IPL Report · Overview"),
-            page("Players", "Players", players, "IPL Report · Players"),
-            page("TeamsVenues", "Teams & Venues", teams, "IPL Report · Teams, Phases & Venues"),
+            page("Overview", "Overview", overview, "Overview · 2008–2025 · use the Season filter on every page"),
+            page("Players", "Players", players, "Players · top 10 batters and bowlers for the selected season"),
+            page("Teams", "Teams", teams, "Teams · standings, champions and titles"),
+            page("Insights", "Match Insights", insights, "Match insights · overs, phases, venues, toss and dismissals"),
         ],
     }
 
@@ -515,6 +710,7 @@ def main():
     write("IPL.Report/definition.pbir", {"version": "1.0", "datasetReference": {"byPath": {"path": "../IPL.SemanticModel"}, "byConnection": None}})
     write("IPL.Report/report.json", build_report())
     copy_base_theme()
+    write(f"IPL.Report/StaticResources/RegisteredResources/{CUSTOM_THEME}.json", THEME)
     write(".gitignore", "data/\n**/.pbi/localSettings.json\n**/.pbi/cache.abf\n")
     print("Done. Open powerbi/IPL.pbip in Power BI Desktop.")
 

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "06d21503ecef56b32c25",
+  "position": {
+    "x": 844,
+    "y": 360,
+    "z": 6000,
+    "height": 140,
+    "width": 136
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Toss Winner Won %"
+                }
+              },
+              "queryRef": "Metrics.Toss Winner Won %",
+              "displayName": "Toss → won"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

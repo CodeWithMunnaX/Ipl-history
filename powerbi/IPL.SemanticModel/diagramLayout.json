@@ -10,11 +10,11 @@
       "nodes": [
         {
           "location": {
-            "x": 1226.8013774886645,
-            "y": 273.025631877749
+            "x": 1233.54072775334,
+            "y": 279.02563187774911
           },
           "nodeIndex": "Metrics",
-          "nodeLineageTag": "bbfc09cc-fffc-47a1-942f-3029380127b9",
+          "nodeLineageTag": "de27bf58-6ab4-4db3-a813-2e730e5869a9",
           "size": {
             "height": 300,
             "width": 234
@@ -23,11 +23,50 @@
         },
         {
           "location": {
-            "x": 170.88317702643678,
-            "y": 61.445745118161994
+            "x": 177.62252729111734,
+            "y": 49.445745118162222
           },
           "nodeIndex": "Champions",
-          "nodeLineageTag": "80d2a060-14db-4f6d-a6ec-582de99df04c",
+          "nodeLineageTag": "27b41d9c-77cb-4ee6-950b-1163f1d14bef",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 193.54855496248143,
+            "y": 508.0512637554981
+          },
+          "nodeIndex": "Deliveries",
+          "nodeLineageTag": "ec0e6055-01e0-4426-842c-6c12f9d85dbe",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 747.776703763737,
+            "y": -50
+          },
+          "nodeIndex": "Matches",
+          "nodeLineageTag": "4b775c60-bc11-48cd-ae17-a614383725b2",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1517.54072775334,
+            "y": 341.02563187774911
+          },
+          "nodeIndex": "Players",
+          "nodeLineageTag": "539fa702-d99b-49a9-9338-b22f09f6dc43",
           "size": {
             "height": 176,
             "width": 234
@@ -36,37 +75,11 @@
         },
         {
           "location": {
-            "x": 193.54855496248214,
-            "y": 496.051263755498
-          },
-          "nodeIndex": "Deliveries",
-          "nodeLineageTag": "5da61148-c462-48ca-a9fe-787ca74c311a",
-          "size": {
-            "height": 300,
-            "width": 234
-          },
-          "zIndex": 0
-        },
-        {
-          "location": {
-            "x": 741.03735349905685,
-            "y": -50
-          },
-          "nodeIndex": "Matches",
-          "nodeLineageTag": "53421998-bc07-4464-95b9-29704dffe09d",
-          "size": {
-            "height": 300,
-            "width": 234
-          },
-          "zIndex": 0
-        },
-        {
-          "location": {
-            "x": 455.09789304592726,
-            "y": 192.35324998506519
+            "x": 461.83724331060785,
+            "y": 192.3532499850661
           },
           "nodeIndex": "Seasons",
-          "nodeLineageTag": "f441e968-8b83-4bc7-b980-54bc62ca853f",
+          "nodeLineageTag": "007cdb95-75a2-402f-a43b-2a1f5c724d96",
           "size": {
             "height": 104,
             "width": 234
@@ -75,11 +88,11 @@
         },
         {
           "location": {
-            "x": 992.80137748866457,
-            "y": 301.79479417530041
+            "x": 999.54072775334,
+            "y": 301.79479417530052
           },
           "nodeIndex": "TeamMatches",
-          "nodeLineageTag": "060d6e52-1c60-4282-9360-e2d46bf459b7",
+          "nodeLineageTag": "833bb131-b9d2-41a7-a78b-0adc06bffd99",
           "size": {
             "height": 224,
             "width": 234
@@ -89,10 +102,10 @@
         {
           "location": {
             "x": 50,
-            "y": 288.68876816142239
+            "y": 300.68876816142256
           },
           "nodeIndex": "Teams",
-          "nodeLineageTag": "683ad1ac-a922-4034-9030-6c360b5b503c",
+          "nodeLineageTag": "dd7aa071-e093-4088-8f3b-1c1e0d15f0e6",
           "size": {
             "height": 152,
             "width": 234
