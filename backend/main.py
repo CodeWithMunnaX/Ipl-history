@@ -4046,6 +4046,178 @@ print("="*60 + "\n")
 
 # ============================================================
 
+# ---------------------------------------------------------------------------
+# Power BI style report: every aggregate the /powerbi dashboard needs, in one call
+# ---------------------------------------------------------------------------
+
+# Dismissals not credited to the bowler
+NON_BOWLER_WICKETS = "('run out', 'retired hurt', 'retired out', 'obstructing the field')"
+
+
+def _rows(query: str, params=None) -> List[Dict]:
+    df = execute_query(query, params or [])
+    return df.astype(object).where(pd.notnull(df), None).to_dict(orient="records")
+
+
+_powerbi_cache: Dict[Optional[int], Dict] = {}
+
+
+@app.get("/powerbi/report")
+async def powerbi_report(season: Optional[int] = None):
+    """
+    Full-dataset report for the Power BI dashboard.
+    `season` filters everything except the season trend and champions list,
+    which always span every season. The data is static, so reports are cached.
+    """
+    if season not in _powerbi_cache:
+        _powerbi_cache[season] = _build_powerbi_report(season)
+    return _powerbi_cache[season]
+
+
+def _build_powerbi_report(season: Optional[int]) -> Dict:
+    try:
+        m_where = "WHERE season_id = ?" if season else ""
+        b_where = "WHERE is_super_over = 0" + (" AND season_id = ?" if season else "")
+        p = [season] if season else []
+
+        kpi = _rows(f"""
+            SELECT COUNT(DISTINCT match_id) AS matches,
+                   SUM(total_runs) AS runs,
+                   SUM(CASE WHEN is_wicket = 1 THEN 1 ELSE 0 END) AS wickets,
+                   SUM(CASE WHEN batter_runs = 6 THEN 1 ELSE 0 END) AS sixes,
+                   SUM(CASE WHEN batter_runs = 4 THEN 1 ELSE 0 END) AS fours,
+                   SUM(extras) AS extras,
+                   ROUND(SUM(total_runs) * 6.0 / SUM(CASE WHEN is_wide_ball = 0 AND is_no_ball = 0 THEN 1 ELSE 0 END), 2) AS run_rate
+            FROM ball_by_ball {b_where}""", p)[0]
+
+        innings = f"""
+            SELECT match_id, innings, team_batting, SUM(total_runs) AS score
+            FROM ball_by_ball {b_where} GROUP BY match_id, innings, team_batting"""
+        kpi.update(_rows(f"""
+            SELECT ROUND(AVG(CASE WHEN innings = 1 THEN score END), 1) AS avg_first_innings,
+                   MAX(score) AS highest_total
+            FROM ({innings})""", p)[0])
+        kpi["teams"] = _rows(f"SELECT COUNT(DISTINCT team1) AS n FROM matches {m_where}", p)[0]["n"]
+        kpi["venues"] = _rows(f"SELECT COUNT(DISTINCT venue) AS n FROM matches {m_where}", p)[0]["n"]
+
+        season_trend = _rows("""
+            SELECT season_id AS season,
+                   COUNT(DISTINCT match_id) AS matches,
+                   ROUND(SUM(total_runs) * 1.0 / COUNT(DISTINCT match_id), 1) AS runs_per_match,
+                   SUM(CASE WHEN batter_runs = 6 THEN 1 ELSE 0 END) AS sixes,
+                   ROUND(SUM(CASE WHEN batter_runs = 6 THEN 1 ELSE 0 END) * 1.0 / COUNT(DISTINCT match_id), 1) AS sixes_per_match,
+                   ROUND(SUM(total_runs) * 6.0 / SUM(CASE WHEN is_wide_ball = 0 AND is_no_ball = 0 THEN 1 ELSE 0 END), 2) AS run_rate
+            FROM ball_by_ball WHERE is_super_over = 0
+            GROUP BY season_id ORDER BY season_id""")
+
+        # "stage" is only filled for recent seasons, so take each season's last match as the final
+        champions = _rows("""
+            WITH ranked AS (
+                SELECT *, ROW_NUMBER() OVER (
+                    PARTITION BY season_id
+                    ORDER BY SUBSTR(match_date, 7, 4) || SUBSTR(match_date, 4, 2) || SUBSTR(match_date, 1, 2) DESC, match_id DESC
+                ) AS rn
+                FROM matches
+            )
+            SELECT season_id AS season, match_winner AS champion,
+                   CASE WHEN match_winner = team1 THEN team2 ELSE team1 END AS runner_up,
+                   venue
+            FROM ranked WHERE rn = 1 ORDER BY season_id""")
+
+        team_table = _rows(f"""
+            WITH t AS (
+                SELECT team1 AS team, match_winner, result FROM matches {m_where}
+                UNION ALL
+                SELECT team2 AS team, match_winner, result FROM matches {m_where}
+            )
+            SELECT team,
+                   COUNT(*) AS played,
+                   SUM(CASE WHEN match_winner = team THEN 1 ELSE 0 END) AS won,
+                   SUM(CASE WHEN result = 'win' AND match_winner <> team THEN 1 ELSE 0 END) AS lost,
+                   SUM(CASE WHEN result <> 'win' THEN 1 ELSE 0 END) AS no_result_or_tie,
+                   ROUND(SUM(CASE WHEN match_winner = team THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 1) AS win_pct
+            FROM t GROUP BY team ORDER BY win_pct DESC, won DESC""", p + p)
+
+        top_batsmen = _rows(f"""
+            SELECT batter AS player,
+                   SUM(batter_runs) AS runs,
+                   SUM(CASE WHEN is_wide_ball = 0 THEN 1 ELSE 0 END) AS balls,
+                   ROUND(SUM(batter_runs) * 100.0 / SUM(CASE WHEN is_wide_ball = 0 THEN 1 ELSE 0 END), 1) AS strike_rate,
+                   SUM(CASE WHEN batter_runs = 4 THEN 1 ELSE 0 END) AS fours,
+                   SUM(CASE WHEN batter_runs = 6 THEN 1 ELSE 0 END) AS sixes,
+                   COUNT(DISTINCT match_id) AS innings
+            FROM ball_by_ball {b_where}
+            GROUP BY batter ORDER BY runs DESC LIMIT 10""", p)
+
+        top_bowlers = _rows(f"""
+            SELECT bowler AS player,
+                   SUM(CASE WHEN is_wicket = 1 AND COALESCE(wicket_kind, '') NOT IN {NON_BOWLER_WICKETS} THEN 1 ELSE 0 END) AS wickets,
+                   SUM(CASE WHEN is_wide_ball = 0 AND is_no_ball = 0 THEN 1 ELSE 0 END) AS balls,
+                   ROUND((SUM(total_runs) - SUM(leg_bye_runs) - SUM(bye_runs) - SUM(penalty_runs)) * 6.0
+                         / SUM(CASE WHEN is_wide_ball = 0 AND is_no_ball = 0 THEN 1 ELSE 0 END), 2) AS economy,
+                   SUM(CASE WHEN total_runs = 0 AND is_wide_ball = 0 AND is_no_ball = 0 THEN 1 ELSE 0 END) AS dots,
+                   COUNT(DISTINCT match_id) AS innings
+            FROM ball_by_ball {b_where}
+            GROUP BY bowler ORDER BY wickets DESC, economy ASC LIMIT 10""", p)
+
+        wicket_types = _rows(f"""
+            SELECT wicket_kind AS kind, COUNT(*) AS count
+            FROM ball_by_ball {b_where} AND is_wicket = 1 AND wicket_kind IS NOT NULL
+            GROUP BY wicket_kind ORDER BY count DESC""", p)
+
+        phases = _rows(f"""
+            SELECT CASE WHEN over_number < 6 THEN 'Powerplay (1-6)'
+                        WHEN over_number < 15 THEN 'Middle (7-15)'
+                        ELSE 'Death (16-20)' END AS phase,
+                   MIN(over_number) AS first_over,
+                   ROUND(SUM(total_runs) * 6.0 / SUM(CASE WHEN is_wide_ball = 0 AND is_no_ball = 0 THEN 1 ELSE 0 END), 2) AS run_rate,
+                   ROUND(SUM(CASE WHEN is_wicket = 1 THEN 1 ELSE 0 END) * 1.0 / COUNT(DISTINCT match_id || '-' || innings), 2) AS wickets_per_innings
+            FROM ball_by_ball {b_where}
+            GROUP BY phase ORDER BY first_over""", p)
+
+        overs = _rows(f"""
+            SELECT over_number + 1 AS over,
+                   ROUND(SUM(total_runs) * 1.0 / COUNT(DISTINCT match_id || '-' || innings), 2) AS avg_runs
+            FROM ball_by_ball {b_where}
+            GROUP BY over_number ORDER BY over_number""", p)
+
+        toss_where = "WHERE result = 'win'" + (" AND season_id = ?" if season else "")
+        toss = _rows(f"""
+            SELECT COUNT(*) AS decided,
+                   SUM(CASE WHEN toss_winner = match_winner THEN 1 ELSE 0 END) AS toss_winner_won,
+                   SUM(CASE WHEN toss_decision = 'field' THEN 1 ELSE 0 END) AS chose_field,
+                   SUM(CASE WHEN toss_decision = 'bat' THEN 1 ELSE 0 END) AS chose_bat,
+                   SUM(CASE WHEN win_by_wickets IS NOT NULL THEN 1 ELSE 0 END) AS won_chasing,
+                   SUM(CASE WHEN win_by_runs IS NOT NULL THEN 1 ELSE 0 END) AS won_defending
+            FROM matches {toss_where}""", p)[0]
+
+        venues = _rows(f"""
+            SELECT m.venue, m.city, COUNT(DISTINCT m.match_id) AS matches,
+                   ROUND(AVG(i.score), 1) AS avg_first_innings
+            FROM matches m
+            JOIN ({innings}) i ON i.match_id = m.match_id AND i.innings = 1
+            {"WHERE m.season_id = ?" if season else ""}
+            GROUP BY m.venue ORDER BY matches DESC LIMIT 10""", p + p)
+
+        return {
+            "season": season,
+            "seasons": [r["season"] for r in season_trend],
+            "kpi": kpi,
+            "season_trend": season_trend,
+            "champions": champions,
+            "team_table": team_table,
+            "top_batsmen": top_batsmen,
+            "top_bowlers": top_bowlers,
+            "wicket_types": wicket_types,
+            "phases": phases,
+            "overs": overs,
+            "toss": toss,
+            "venues": venues,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error building report: {str(e)}")
+
+
 if __name__ == "__main__":
     import uvicorn
     import os

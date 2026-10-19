@@ -213,6 +213,12 @@ export const iplApi = createApi({
       query: (matchId) => `/matches/${matchId}`,
       providesTags: ["Scorecard"],
     }),
+
+    // Power BI report (season undefined = all seasons)
+    getPowerBIReport: builder.query<any, number | undefined>({
+      query: (season) => (season ? `/powerbi/report?season=${season}` : "/powerbi/report"),
+      providesTags: ["Seasons"],
+    }),
   }),
 });
 
@@ -256,6 +262,8 @@ export const {
   useGetMatchLiveScoreQuery,
   // Match Lists
   useGetMatchByIdQuery,
+  // Power BI
+  useGetPowerBIReportQuery,
 } = iplApi;
 
 

@@ -18,7 +18,7 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { Home, Users, Medal, Activity, LayoutGrid, FileText, BarChart3 } from "lucide-react";
+import { Home, Users, Medal, Activity, LayoutGrid, FileText, BarChart3, Pin } from "lucide-react";
 import Image from "next/image";
 import iplLogo from "@/app/images/tata_ipl-logo_brandlogos.net_k2ryd (1).png";
 
@@ -139,11 +139,35 @@ export default function AppSidebar({ children }: { children: React.ReactNode }) 
 
         </SidebarContent>
         <SidebarSeparator className="bg-gray-300 h-px" />
-        <SidebarFooter className="bg-gray-100 p-4 border-t-2 border-gray-200">
-          <div className="text-center">
-            <p className="text-gray-700 text-sm font-semibold">🏏 IPL Dashboard</p>
-            <p className="text-gray-500 text-xs mt-1">Powered by Analytics</p>
-          </div>
+        <SidebarFooter className="bg-gray-100 p-3 border-t-2 border-gray-200">
+          {/* Pinned: Power BI report */}
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                className={`rounded-lg p-6 transition-all duration-200 ${
+                  pathname === "/powerbi"
+                    ? "bg-[#252423] text-white shadow-md"
+                    : "bg-white border border-gray-300 hover:bg-[#252423] hover:text-white"
+                }`}
+              >
+                <Link href="/powerbi" className="group flex items-center gap-3 w-full">
+                  <div className="p-2 rounded-md bg-[#252423] group-hover:bg-[#3b3a39]">
+                    <div className="flex items-end gap-[2px] h-5 w-5 justify-center" aria-hidden>
+                      <span className="w-1 h-2 rounded-sm bg-[#f2c811]" />
+                      <span className="w-1 h-3.5 rounded-sm bg-[#f2c811]" />
+                      <span className="w-1 h-5 rounded-sm bg-[#f2c811]" />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm">Power BI</div>
+                    <div className="text-xs opacity-70 truncate">Full data report</div>
+                  </div>
+                  <Pin className="w-4 h-4 opacity-60 rotate-45" aria-label="Pinned" />
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
