@@ -11,7 +11,3 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.13.4
-    disk:
-      name: player-images
-      mountPath: /opt/render/project/src/player_images
-      sizeGB: 1
