@@ -1,0 +1,1911 @@
+{
+  "compatibilityLevel": 1606,
+  "model": {
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"DataFolder\", \"Seasons\", \"Matches\", \"Deliveries\", \"TeamMatches\", \"Teams\", \"Champions\", \"Metrics\"]"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "Entities": {
+              "champions.champion": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Champions",
+                    "ConceptualProperty": "champion"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Champion": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "champions.runner_up": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Champions",
+                    "ConceptualProperty": "runner_up"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Runner-up": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "champions.season": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Champions",
+                    "ConceptualProperty": "season"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Season": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "deliveries.batter": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Deliveries",
+                    "ConceptualProperty": "batter"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Batter": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "deliveries.bowler": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Deliveries",
+                    "ConceptualProperty": "bowler"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Bowler": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "deliveries.over": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Deliveries",
+                    "ConceptualProperty": "over"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Over": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "deliveries.phase": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Deliveries",
+                    "ConceptualProperty": "phase"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Phase": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "deliveries.wicket_kind": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Deliveries",
+                    "ConceptualProperty": "wicket_kind"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Dismissal": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "matches.city": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Matches",
+                    "ConceptualProperty": "city"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "City": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "matches.venue": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Matches",
+                    "ConceptualProperty": "venue"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Venue": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.chasing_win_": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Chasing Win %"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Chasing team won": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.chose_to_field_": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Chose to Field %"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Chose to field": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_bat_matches": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Bat Matches"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Matches": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_bowl_matches": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Bowl Matches"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Matches": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_dots": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Dots"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Dot balls": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_economy": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Economy"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Economy": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_fours": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Fours"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "4s": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_runs": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Runs"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Runs": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_sixes": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Sixes"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "6s": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_strike_rate": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Strike Rate"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Strike rate": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.top_10_wickets": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Top 10 Wickets"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Wickets": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "metrics.toss_winner_won_": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Metrics",
+                    "ConceptualProperty": "Toss Winner Won %"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Toss winner won": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "seasons.season": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Seasons",
+                    "ConceptualProperty": "season"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Season": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              },
+              "teams.team": {
+                "Definition": {
+                  "Binding": {
+                    "ConceptualEntity": "Teams",
+                    "ConceptualProperty": "team"
+                  }
+                },
+                "State": "Generated",
+                "Terms": [
+                  {
+                    "Team": {
+                      "Source": {
+                        "Agent": "PowerBI.VisualColumnRename",
+                        "Type": "External"
+                      },
+                      "State": "Suggested",
+                      "Weight": 0.9
+                    }
+                  }
+                ]
+              }
+            },
+            "Language": "en-US",
+            "Version": "2.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "expressions": [
+      {
+        "name": "DataFolder",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Text"
+          }
+        ],
+        "expression": "\"C:\\Users\\MeanderSoftware\\Desktop\\My Github Project\\Ipl-history\\powerbi\\data\" meta [IsParameterQuery = true, Type = \"Text\", IsParameterQueryRequired = true]",
+        "kind": "m",
+        "lineageTag": "929da51b-b59e-4ece-b97f-ad65487ac680"
+      }
+    ],
+    "relationships": [
+      {
+        "name": "08d90315499a7b87c1d0",
+        "fromColumn": "season",
+        "fromTable": "Matches",
+        "toColumn": "season",
+        "toTable": "Seasons"
+      },
+      {
+        "name": "fcda74a46c54ed388786",
+        "fromColumn": "season",
+        "fromTable": "Champions",
+        "toColumn": "season",
+        "toTable": "Seasons"
+      },
+      {
+        "name": "eaabfc05beb9adb37d29",
+        "fromColumn": "match_id",
+        "fromTable": "Deliveries",
+        "toColumn": "match_id",
+        "toTable": "Matches"
+      },
+      {
+        "name": "9d56fa5f997b91f9630c",
+        "fromColumn": "match_id",
+        "fromTable": "TeamMatches",
+        "toColumn": "match_id",
+        "toTable": "Matches"
+      },
+      {
+        "name": "7bcee6155827fe931fdc",
+        "fromColumn": "team",
+        "fromTable": "TeamMatches",
+        "toColumn": "team",
+        "toTable": "Teams"
+      },
+      {
+        "name": "b40f56f4-39ce-4e60-8878-cd85b417b306",
+        "fromColumn": "match_date",
+        "fromTable": "Matches",
+        "joinOnDateBehavior": "datePartOnly",
+        "toColumn": "Date",
+        "toTable": "LocalDateTable_71fd02d2-4f10-4fea-982d-a9a789316eca"
+      }
+    ],
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "Seasons",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "season",
+            "dataType": "int64",
+            "lineageTag": "23e144a2-1e25-4517-a685-32847d0fb6d3",
+            "sourceColumn": "season",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "83f5a3eb-62a9-49f3-8a77-047251bcfcbe",
+        "partitions": [
+          {
+            "name": "Seasons",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"\\seasons.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),",
+                "    Typed = Table.TransformColumnTypes(Promoted, {{\"season\", Int64.Type}})",
+                "in",
+                "    Typed"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Matches",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "match_id",
+            "dataType": "int64",
+            "lineageTag": "c467b516-4778-457a-8dc1-ccdfe8c8bcee",
+            "sourceColumn": "match_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "season",
+            "dataType": "int64",
+            "lineageTag": "c1c000eb-3aad-4b5c-9762-2c19102a9a7d",
+            "sourceColumn": "season",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "match_date",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "dd mmm yyyy",
+            "lineageTag": "0c49b3c6-d822-4107-8a92-11cddedbe65b",
+            "sourceColumn": "match_date",
+            "summarizeBy": "none",
+            "variations": [
+              {
+                "name": "Variation",
+                "defaultHierarchy": {
+                  "hierarchy": "Date Hierarchy",
+                  "table": "LocalDateTable_71fd02d2-4f10-4fea-982d-a9a789316eca"
+                },
+                "isDefault": true,
+                "relationship": "b40f56f4-39ce-4e60-8878-cd85b417b306"
+              }
+            ]
+          },
+          {
+            "name": "city",
+            "dataType": "string",
+            "lineageTag": "b36b33e8-4318-42b5-b02d-74008a1aaa62",
+            "sourceColumn": "city",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "venue",
+            "dataType": "string",
+            "lineageTag": "a7484e5e-bd18-43ce-b6e1-dca76a882c91",
+            "sourceColumn": "venue",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "team1",
+            "dataType": "string",
+            "lineageTag": "91128201-6b23-4990-8857-022db811a46f",
+            "sourceColumn": "team1",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "team2",
+            "dataType": "string",
+            "lineageTag": "88a82728-b785-43a8-925f-3cb072e385dd",
+            "sourceColumn": "team2",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "toss_winner",
+            "dataType": "string",
+            "lineageTag": "601543b0-4530-4d28-adef-a210950d1823",
+            "sourceColumn": "toss_winner",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "toss_decision",
+            "dataType": "string",
+            "lineageTag": "5ffea1de-9d69-4a57-a735-1853cc681845",
+            "sourceColumn": "toss_decision",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "match_winner",
+            "dataType": "string",
+            "lineageTag": "576cdce5-f8cc-415d-a167-bc6f945272d7",
+            "sourceColumn": "match_winner",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "win_by_runs",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "f69f69b3-07ef-4ffa-88a5-e7dcd20494eb",
+            "sourceColumn": "win_by_runs",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "win_by_wickets",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "30972ddd-5cf8-4ec9-a278-e3e491592984",
+            "sourceColumn": "win_by_wickets",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "result",
+            "dataType": "string",
+            "lineageTag": "1cf60ff0-71b0-4b11-a9f0-e885e290bafd",
+            "sourceColumn": "result",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "stage",
+            "dataType": "string",
+            "lineageTag": "8c7845bc-64b0-433d-9afd-27cb6b8147e8",
+            "sourceColumn": "stage",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "chasing_team_won",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "939b5fd9-353e-4961-82db-5aaa39ae13d6",
+            "sourceColumn": "chasing_team_won",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "toss_winner_won",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "99b713ac-8a97-49cd-b173-c34463156531",
+            "sourceColumn": "toss_winner_won",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "has_result",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "73a333d7-5100-4c08-8741-c957cf73bdd2",
+            "sourceColumn": "has_result",
+            "summarizeBy": "sum"
+          }
+        ],
+        "lineageTag": "8272a4ff-552c-4476-af45-eaab0fb95906",
+        "partitions": [
+          {
+            "name": "Matches",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"\\matches.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),",
+                "    Typed = Table.TransformColumnTypes(Promoted, {{\"match_id\", Int64.Type}, {\"season\", Int64.Type}, {\"match_date\", type date}, {\"city\", type text}, {\"venue\", type text}, {\"team1\", type text}, {\"team2\", type text}, {\"toss_winner\", type text}, {\"toss_decision\", type text}, {\"match_winner\", type text}, {\"win_by_runs\", type number}, {\"win_by_wickets\", type number}, {\"result\", type text}, {\"stage\", type text}, {\"chasing_team_won\", Int64.Type}, {\"toss_winner_won\", Int64.Type}, {\"has_result\", Int64.Type}})",
+                "in",
+                "    Typed"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Deliveries",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "match_id",
+            "dataType": "int64",
+            "lineageTag": "91ff728b-bfeb-4c0a-8b00-63f8914c614e",
+            "sourceColumn": "match_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "innings",
+            "dataType": "int64",
+            "lineageTag": "daaf09d9-ed92-4428-b3f2-274662e1f5a0",
+            "sourceColumn": "innings",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "over",
+            "dataType": "int64",
+            "lineageTag": "27ec0318-52cc-4e5c-837f-6f24852f2fcb",
+            "sourceColumn": "over",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "phase",
+            "dataType": "string",
+            "lineageTag": "7387cbc0-d440-4f3b-a309-2aec57181421",
+            "sourceColumn": "phase",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "batter",
+            "dataType": "string",
+            "lineageTag": "6312ed05-3a88-49b0-8a07-0e62b59437fe",
+            "sourceColumn": "batter",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "bowler",
+            "dataType": "string",
+            "lineageTag": "97208103-2e0d-4278-9cbe-027feda3d8c1",
+            "sourceColumn": "bowler",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "batting_team",
+            "dataType": "string",
+            "lineageTag": "8eca02e0-4815-4fec-b562-db90bd9c41ce",
+            "sourceColumn": "batting_team",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "bowling_team",
+            "dataType": "string",
+            "lineageTag": "eefbf46c-2fb9-4307-94df-9990ca451bb1",
+            "sourceColumn": "bowling_team",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "batter_runs",
+            "dataType": "int64",
+            "lineageTag": "bc21574c-eff7-4c82-988f-b0100a674dcf",
+            "sourceColumn": "batter_runs",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "extras",
+            "dataType": "int64",
+            "lineageTag": "820cc5ba-7868-4270-8203-6abeae4777de",
+            "sourceColumn": "extras",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "total_runs",
+            "dataType": "int64",
+            "lineageTag": "f98ed4bb-7613-473e-982a-9d05e6319c2c",
+            "sourceColumn": "total_runs",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "bowler_runs",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "4e245b3b-4c4c-46d8-8b0c-780e8c3a1d4b",
+            "sourceColumn": "bowler_runs",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "is_legal",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "edddc5f2-896c-4327-85fe-930a4bd19370",
+            "sourceColumn": "is_legal",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ball_faced",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "0036aefd-388c-4d8b-8e6c-875966edfeb1",
+            "sourceColumn": "ball_faced",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "is_four",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "6195df0c-2404-41fd-b81e-fa9d2d5fbeb6",
+            "sourceColumn": "is_four",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "is_six",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "2c22b7da-9050-4dfc-be64-71c7b81f610c",
+            "sourceColumn": "is_six",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "is_dot",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "fbab84fd-5824-44fc-b163-b783ce0fb2d4",
+            "sourceColumn": "is_dot",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "is_wicket",
+            "dataType": "int64",
+            "lineageTag": "4e062918-e328-4620-8e24-e34c33c41782",
+            "sourceColumn": "is_wicket",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "bowler_wicket",
+            "dataType": "int64",
+            "isHidden": true,
+            "lineageTag": "50f5ddff-f530-484d-bf88-2a0ef1f6ef96",
+            "sourceColumn": "bowler_wicket",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "wicket_kind",
+            "dataType": "string",
+            "lineageTag": "cf33d344-afce-4b30-a5b4-2da9fe1b4629",
+            "sourceColumn": "wicket_kind",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "player_out",
+            "dataType": "string",
+            "lineageTag": "1fba8f03-5b0c-427e-8416-c0f50d7a69a2",
+            "sourceColumn": "player_out",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "9d11ac36-955d-4975-8096-561f0b498abb",
+        "partitions": [
+          {
+            "name": "Deliveries",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"\\deliveries.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),",
+                "    Typed = Table.TransformColumnTypes(Promoted, {{\"match_id\", Int64.Type}, {\"innings\", Int64.Type}, {\"over\", Int64.Type}, {\"phase\", type text}, {\"batter\", type text}, {\"bowler\", type text}, {\"batting_team\", type text}, {\"bowling_team\", type text}, {\"batter_runs\", Int64.Type}, {\"extras\", Int64.Type}, {\"total_runs\", Int64.Type}, {\"bowler_runs\", Int64.Type}, {\"is_legal\", Int64.Type}, {\"ball_faced\", Int64.Type}, {\"is_four\", Int64.Type}, {\"is_six\", Int64.Type}, {\"is_dot\", Int64.Type}, {\"is_wicket\", Int64.Type}, {\"bowler_wicket\", Int64.Type}, {\"wicket_kind\", type text}, {\"player_out\", type text}})",
+                "in",
+                "    Typed"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "TeamMatches",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "match_id",
+            "dataType": "int64",
+            "lineageTag": "e70a66cc-cb57-4ad4-91af-ee75cd29e1a5",
+            "sourceColumn": "match_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "team",
+            "dataType": "string",
+            "lineageTag": "fa7a6a43-da1a-4866-8b09-7d94436360d0",
+            "sourceColumn": "team",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "opponent",
+            "dataType": "string",
+            "lineageTag": "f9ec7bf4-bee2-46d5-8ad6-b545ce8b00d0",
+            "sourceColumn": "opponent",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "won",
+            "dataType": "int64",
+            "lineageTag": "30393d02-1c2c-47b8-982f-f2e2a6cc1384",
+            "sourceColumn": "won",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "lost",
+            "dataType": "int64",
+            "lineageTag": "40dac280-f920-4839-b012-a0550a93e25e",
+            "sourceColumn": "lost",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "no_result_or_tie",
+            "dataType": "int64",
+            "lineageTag": "1f4cab7e-857c-453d-9010-5036bffe3e4c",
+            "sourceColumn": "no_result_or_tie",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "d7d4e28f-5f4a-4871-a0dd-d831efff9eb2",
+        "partitions": [
+          {
+            "name": "TeamMatches",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"\\team_matches.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),",
+                "    Typed = Table.TransformColumnTypes(Promoted, {{\"match_id\", Int64.Type}, {\"team\", type text}, {\"opponent\", type text}, {\"won\", Int64.Type}, {\"lost\", Int64.Type}, {\"no_result_or_tie\", Int64.Type}})",
+                "in",
+                "    Typed"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Teams",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "team",
+            "dataType": "string",
+            "lineageTag": "ae7bc024-544c-4ba0-9f01-09606673ac60",
+            "sourceColumn": "team",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "short_name",
+            "dataType": "string",
+            "lineageTag": "53861f24-e5c8-4d52-9785-3835235b3cda",
+            "sourceColumn": "short_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "logo",
+            "dataType": "string",
+            "lineageTag": "cebcf8a4-5080-41fc-a8bf-71ca4c73c534",
+            "sourceColumn": "logo",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "50287533-bd83-4680-8f6f-cef9117a142a",
+        "partitions": [
+          {
+            "name": "Teams",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"\\teams.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),",
+                "    Typed = Table.TransformColumnTypes(Promoted, {{\"team\", type text}, {\"short_name\", type text}, {\"logo\", type text}})",
+                "in",
+                "    Typed"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Champions",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "season",
+            "dataType": "int64",
+            "lineageTag": "d40a8f2a-b1e4-4e80-acb1-9836a78c899c",
+            "sourceColumn": "season",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "champion",
+            "dataType": "string",
+            "lineageTag": "87c160a9-746e-4178-bb5c-f789d5ab0036",
+            "sourceColumn": "champion",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "runner_up",
+            "dataType": "string",
+            "lineageTag": "2be7a979-ed0c-4993-8d48-b85a03d5cb4a",
+            "sourceColumn": "runner_up",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "final_venue",
+            "dataType": "string",
+            "lineageTag": "a32a9b41-705d-47e8-ba71-3412af44d911",
+            "sourceColumn": "final_venue",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "f98b9913-94cc-4d7a-a1a9-0c34b6d3eb74",
+        "partitions": [
+          {
+            "name": "Champions",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Csv.Document(File.Contents(DataFolder & \"\\champions.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),",
+                "    Typed = Table.TransformColumnTypes(Promoted, {{\"season\", Int64.Type}, {\"champion\", type text}, {\"runner_up\", type text}, {\"final_venue\", type text}})",
+                "in",
+                "    Typed"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Metrics",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Dummy",
+            "dataType": "string",
+            "isHidden": true,
+            "lineageTag": "a99c662c-4422-4145-925a-979b402c0cd7",
+            "sourceColumn": "Dummy"
+          }
+        ],
+        "lineageTag": "a3f62ab7-5129-49ee-bc12-e7d2257207f4",
+        "measures": [
+          {
+            "name": "Matches",
+            "expression": "DISTINCTCOUNT(Matches[match_id])",
+            "formatString": "#,0",
+            "lineageTag": "fff868c5-a958-45c6-abd0-b5b39835fe00"
+          },
+          {
+            "name": "Total Runs",
+            "expression": "SUM(Deliveries[total_runs])",
+            "formatString": "#,0",
+            "lineageTag": "36368c93-bf6e-4876-a277-124a5d4140aa"
+          },
+          {
+            "name": "Wickets",
+            "expression": "SUM(Deliveries[is_wicket])",
+            "formatString": "#,0",
+            "lineageTag": "d55666ec-2af9-44c7-bc2c-74e5422e4ca1"
+          },
+          {
+            "name": "Sixes",
+            "expression": "SUM(Deliveries[is_six])",
+            "formatString": "#,0",
+            "lineageTag": "5ac9eed1-f51c-4ca9-8264-ed0e66921bb3"
+          },
+          {
+            "name": "Fours",
+            "expression": "SUM(Deliveries[is_four])",
+            "formatString": "#,0",
+            "lineageTag": "a166fed1-5cdf-4ee3-a4ca-adb6e06e9859"
+          },
+          {
+            "name": "Extras",
+            "expression": "SUM(Deliveries[extras])",
+            "formatString": "#,0",
+            "lineageTag": "96c3a0e7-b906-4706-94d9-e097dbe705d8"
+          },
+          {
+            "name": "Legal Balls",
+            "expression": "SUM(Deliveries[is_legal])",
+            "formatString": "#,0",
+            "lineageTag": "c488cee5-8d70-46fc-98c9-5ebab0d0fc2d"
+          },
+          {
+            "name": "Run Rate",
+            "expression": "DIVIDE([Total Runs] * 6, [Legal Balls])",
+            "formatString": "0.00",
+            "lineageTag": "2af3c78c-fc75-4265-8942-b6f87eaae666"
+          },
+          {
+            "name": "Innings",
+            "expression": "COUNTROWS(SUMMARIZE(Deliveries, Deliveries[match_id], Deliveries[innings]))",
+            "formatString": "#,0",
+            "lineageTag": "36197a21-9771-4500-b2af-962591debe2d"
+          },
+          {
+            "name": "Runs per Match",
+            "expression": "DIVIDE([Total Runs], [Matches])",
+            "formatString": "0.0",
+            "lineageTag": "eb9cbbf3-aee1-4d48-9c87-9a605c020109"
+          },
+          {
+            "name": "Sixes per Match",
+            "expression": "DIVIDE([Sixes], [Matches])",
+            "formatString": "0.0",
+            "lineageTag": "5d521c31-8636-4bb3-9a1d-a7e84f5fca61"
+          },
+          {
+            "name": "Avg Runs per Over",
+            "expression": "DIVIDE([Total Runs], [Innings])",
+            "formatString": "0.00",
+            "lineageTag": "7c488a3f-b48c-4734-a30c-94eec31086c0"
+          },
+          {
+            "name": "Wickets per Innings",
+            "expression": "DIVIDE([Wickets], [Innings])",
+            "formatString": "0.00",
+            "lineageTag": "2764542d-83a0-47e1-87d0-6f088ef7f5c8"
+          },
+          {
+            "name": "Highest Total",
+            "expression": "MAXX(SUMMARIZE(Deliveries, Deliveries[match_id], Deliveries[innings]), CALCULATE(SUM(Deliveries[total_runs])))",
+            "formatString": "#,0",
+            "lineageTag": "c01f0023-1e16-4b95-b409-35e2ab4813e9"
+          },
+          {
+            "name": "Avg 1st Innings",
+            "expression": "AVERAGEX(FILTER(SUMMARIZE(Deliveries, Deliveries[match_id], Deliveries[innings]), Deliveries[innings] = 1), CALCULATE(SUM(Deliveries[total_runs])))",
+            "formatString": "0.0",
+            "lineageTag": "c91eea95-bd64-44b2-860d-dc08a2339f80"
+          },
+          {
+            "name": "Batter Runs",
+            "expression": "SUM(Deliveries[batter_runs])",
+            "formatString": "#,0",
+            "lineageTag": "baaf5e4e-0764-43a2-a01e-a00b45e66386"
+          },
+          {
+            "name": "Balls Faced",
+            "expression": "SUM(Deliveries[ball_faced])",
+            "formatString": "#,0",
+            "lineageTag": "6f247436-dbb1-4161-81ed-29ce5fc03865"
+          },
+          {
+            "name": "Strike Rate",
+            "expression": "DIVIDE([Batter Runs] * 100, [Balls Faced])",
+            "formatString": "0.0",
+            "lineageTag": "93383418-7431-48cf-9138-27fde5b3cf82"
+          },
+          {
+            "name": "Batter Rank",
+            "expression": "IF(HASONEVALUE(Deliveries[batter]), RANKX(ALLSELECTED(Deliveries[batter]), [Batter Runs], , DESC, Dense))",
+            "formatString": "0",
+            "lineageTag": "605ab1f0-ae78-44ef-b3e9-4db133957860"
+          },
+          {
+            "name": "Top 10 Runs",
+            "expression": "IF([Batter Rank] <= 10, [Batter Runs])",
+            "formatString": "#,0",
+            "lineageTag": "2fb76bb0-e423-4ec9-b120-b1d171437c17"
+          },
+          {
+            "name": "Top 10 Strike Rate",
+            "expression": "IF([Batter Rank] <= 10, [Strike Rate])",
+            "formatString": "0.0",
+            "lineageTag": "f2676f9b-1a3f-4152-b55c-380a58d9e4ce"
+          },
+          {
+            "name": "Top 10 Fours",
+            "expression": "IF([Batter Rank] <= 10, [Fours])",
+            "formatString": "#,0",
+            "lineageTag": "8ee8e430-522a-4dc8-98c6-24d87eff847e"
+          },
+          {
+            "name": "Top 10 Sixes",
+            "expression": "IF([Batter Rank] <= 10, [Sixes])",
+            "formatString": "#,0",
+            "lineageTag": "26e3e995-04a0-4d30-9ddb-b591eb43c47a"
+          },
+          {
+            "name": "Top 10 Bat Matches",
+            "expression": "IF([Batter Rank] <= 10, DISTINCTCOUNT(Deliveries[match_id]))",
+            "formatString": "#,0",
+            "lineageTag": "8340c2b3-160a-4dcc-a91b-03304c64c971"
+          },
+          {
+            "name": "Bowler Wickets",
+            "expression": "SUM(Deliveries[bowler_wicket])",
+            "formatString": "#,0",
+            "lineageTag": "79dfa2a4-94fd-4854-9d90-5908e96027c6"
+          },
+          {
+            "name": "Runs Conceded",
+            "expression": "SUM(Deliveries[bowler_runs])",
+            "formatString": "#,0",
+            "lineageTag": "5589fe89-a9cc-4130-b2a9-09f5cad9db57"
+          },
+          {
+            "name": "Economy",
+            "expression": "DIVIDE([Runs Conceded] * 6, [Legal Balls])",
+            "formatString": "0.00",
+            "lineageTag": "cd237e2d-1188-48af-b40c-eee58cf02422"
+          },
+          {
+            "name": "Dot Balls",
+            "expression": "SUM(Deliveries[is_dot])",
+            "formatString": "#,0",
+            "lineageTag": "9e977f34-dca9-4e32-abeb-e458afb515af"
+          },
+          {
+            "name": "Bowler Rank",
+            "expression": "IF(HASONEVALUE(Deliveries[bowler]), RANKX(ALLSELECTED(Deliveries[bowler]), [Bowler Wickets] * 1000 - [Economy], , DESC, Dense))",
+            "formatString": "0",
+            "lineageTag": "2f18d2e9-87e9-4c14-bd48-9a9cae623196"
+          },
+          {
+            "name": "Top 10 Wickets",
+            "expression": "IF([Bowler Rank] <= 10, [Bowler Wickets])",
+            "formatString": "#,0",
+            "lineageTag": "701cd1e3-c7d1-4f52-b37e-4eb37bca9d8e"
+          },
+          {
+            "name": "Top 10 Economy",
+            "expression": "IF([Bowler Rank] <= 10, [Economy])",
+            "formatString": "0.00",
+            "lineageTag": "8b6021f3-ff80-43db-8529-a4a6f04f1c22"
+          },
+          {
+            "name": "Top 10 Dots",
+            "expression": "IF([Bowler Rank] <= 10, [Dot Balls])",
+            "formatString": "#,0",
+            "lineageTag": "77c98af4-c4ad-44a9-9276-b13b923d1d92"
+          },
+          {
+            "name": "Top 10 Bowl Matches",
+            "expression": "IF([Bowler Rank] <= 10, DISTINCTCOUNT(Deliveries[match_id]))",
+            "formatString": "#,0",
+            "lineageTag": "a85e3c45-d936-4dba-b1d9-3692ec467627"
+          },
+          {
+            "name": "Played",
+            "expression": "COUNTROWS(TeamMatches)",
+            "formatString": "#,0",
+            "lineageTag": "1eefdaf2-042a-4fe8-b027-12134e1daaa5"
+          },
+          {
+            "name": "Won",
+            "expression": "SUM(TeamMatches[won])",
+            "formatString": "#,0",
+            "lineageTag": "d2b9c170-b655-43a2-94cf-97caa8442103"
+          },
+          {
+            "name": "Lost",
+            "expression": "SUM(TeamMatches[lost])",
+            "formatString": "#,0",
+            "lineageTag": "395385d1-5d15-4cc9-acc6-d62f7d52114d"
+          },
+          {
+            "name": "Tie / NR",
+            "expression": "SUM(TeamMatches[no_result_or_tie])",
+            "formatString": "#,0",
+            "lineageTag": "6c7a60e2-2c32-45ce-9e0c-a65fe73193b9"
+          },
+          {
+            "name": "Win %",
+            "expression": "DIVIDE([Won], [Played])",
+            "formatString": "0.0%",
+            "lineageTag": "ac48ca9d-ee03-4e63-bbdb-e1ba362319d8"
+          },
+          {
+            "name": "Titles",
+            "expression": "COUNTROWS(Champions)",
+            "formatString": "0",
+            "lineageTag": "a97a5e0d-3d56-4982-bf12-f3333a7f59b4"
+          },
+          {
+            "name": "Matches with Result",
+            "expression": "SUM(Matches[has_result])",
+            "formatString": "#,0",
+            "lineageTag": "ea11d1fc-b492-4f9b-ad50-896880907b83"
+          },
+          {
+            "name": "Toss Winner Won %",
+            "expression": "DIVIDE(SUM(Matches[toss_winner_won]), [Matches with Result])",
+            "formatString": "0.0%",
+            "lineageTag": "cd59d20f-9506-44bb-86f0-2820e4ce1621"
+          },
+          {
+            "name": "Chose to Field %",
+            "expression": "DIVIDE(CALCULATE(COUNTROWS(Matches), Matches[toss_decision] = \"field\"), COUNTROWS(Matches))",
+            "formatString": "0.0%",
+            "lineageTag": "17ba2564-12ea-44f0-b021-3f18323bfdd9"
+          },
+          {
+            "name": "Chasing Win %",
+            "expression": "DIVIDE(SUM(Matches[chasing_team_won]), [Matches with Result])",
+            "formatString": "0.0%",
+            "lineageTag": "e2205e4a-dbe6-46dc-958c-c925da7fb6f8"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Metrics",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = #table(type table [Dummy = text], {})",
+                "in",
+                "    Source"
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "DateTableTemplate_dfabca49-328e-4a8a-aac2-c01a1b2caab1",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "80fb1f3d-e1e1-4d9f-85b0-aabab6be5373",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "7c9f9fef-ba23-4b1e-a5d9-d93d2005afcc",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "f9c32027-bd37-4b7c-bf0e-082f5090b350",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "da20c7c6-6946-4f3c-ab9c-b99fc902d871",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "ee970888-032a-4b56-8acf-e8976a097234",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "b70a8d31-fa5d-4330-8b04-932952225869",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "b4318afd-dd89-47e1-be96-d2d7aeaa5d1f",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "2edf7b30-a524-4f2b-b683-d6643f1425de",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "fff7fb89-c197-4261-8a75-83bb046ca811",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "f1e9590e-3399-44e2-87c1-0dd10f8193b6",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "8cd30c99-a345-4016-8735-3f0e789e072d",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "7193433d-0765-428b-862b-a8a86821357e"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "2d745251-1acf-4261-9934-31888e1d82a0",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_dfabca49-328e-4a8a-aac2-c01a1b2caab1",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "LocalDateTable_71fd02d2-4f10-4fea-982d-a9a789316eca",
+        "annotations": [
+          {
+            "name": "__PBI_LocalDateTable",
+            "value": "true"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "c31fd04f-6991-406f-af41-178aca7629a3",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "61614759-8b6d-4a31-84cc-2813bea4799c",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "ea4be0d5-c266-4f73-acd5-019acbce36af",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "f8216355-916d-4848-97d1-286efb2f7434",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "9bd6e2cc-8d26-4ed5-b5d9-0082e31b8d01",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "b13dd854-8e7c-4ec2-a568-c2f0b4ef445c",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "604d8e90-d183-4529-bbae-c6b044711c3b",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "9ed38916-9790-4b9d-bf28-82739506018c",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "a1a86af9-3394-47c5-aa6b-5f49239022d5",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "cde0d3fc-0fd8-473d-9cf7-4d2738cdd516",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "cbd90d0f-b85c-4759-9377-64a2350bda11",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "cff8e461-bc51-450f-b281-5df04e0a705d"
+          }
+        ],
+        "isHidden": true,
+        "lineageTag": "c67b5a69-9ad4-441c-be53-08ef2f4ba0e3",
+        "partitions": [
+          {
+            "name": "LocalDateTable_71fd02d2-4f10-4fea-982d-a9a789316eca",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(Year(MIN('Matches'[match_date])), 1, 1), Date(Year(MAX('Matches'[match_date])), 12, 31))",
+              "type": "calculated"
+            }
+          }
+        ],
+        "showAsVariationsOnly": true
+      }
+    ]
+  }
+}
