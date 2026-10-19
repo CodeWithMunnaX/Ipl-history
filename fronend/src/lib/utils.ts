@@ -18,6 +18,8 @@ export function normalizePlayerImage(src?: string | null): string | null {
   if (/^https?:\/\//i.test(trimmed)) {
     return /espncricinfo\.com\//i.test(trimmed) && !/\.(png|jpe?g|webp|gif)(\?|$)/i.test(trimmed) ? null : trimmed;
   }
+  // Already normalized (callers sometimes normalize twice)
+  if (trimmed.startsWith("/api/")) return trimmed;
   const file = trimmed.replace(/^\/?(player_images\/)?/, "");
   if (/^[\w.-]+\.(png|jpe?g|webp|gif)$/i.test(file)) return `/api/player_images/${file}`;
   return null;
