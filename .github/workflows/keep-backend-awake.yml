@@ -1,0 +1,16 @@
+# Render's free plan sleeps after 15 minutes without traffic, and the first
+# request then takes ~50s (the site shows empty stats meanwhile). Ping it
+# regularly so it stays awake.
+name: Keep backend awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend
+        run: curl -fsS --max-time 120 https://ipl-backend-iz9f.onrender.com/seasons -o /dev/null

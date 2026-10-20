@@ -363,7 +363,7 @@ export default function Home() {
                 <div className="flex-1 flex flex-col justify-center space-y-3">
                   <div className="bg-white rounded-lg p-3 shadow-inner border border-blue-200">
                     <div className="text-sm text-gray-500 font-semibold">Total Matches</div>
-                    <div className="text-xl font-bold text-blue-600">{Array.isArray(matches) ? matches.length : 0}</div>
+                    <div className="text-xl font-bold text-blue-600">{Array.isArray(matches) ? matches.length : "…"}</div>
                   </div>
                   <div className="bg-white rounded-lg p-3 shadow-inner border border-blue-200">
                     <div className="text-sm text-gray-500 font-semibold">Top Batsmen</div>
@@ -510,7 +510,7 @@ export default function Home() {
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(teams) ? teams.length : 0}</div>
+                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(teams) ? teams.length : "…"}</div>
                 <div className="text-blue-100 text-xs sm:text-sm">Total Teams</div>
               </div>
               <div className="text-2xl sm:text-3xl lg:text-4xl">🏏</div>
@@ -520,7 +520,7 @@ export default function Home() {
           <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(players) ? players.length : 0}</div>
+                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(players) ? players.length : "…"}</div>
                 <div className="text-green-100 text-xs sm:text-sm">Total Players</div>
               </div>
               <div className="text-2xl sm:text-3xl lg:text-4xl">👥</div>
@@ -530,7 +530,7 @@ export default function Home() {
           <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(matches) ? matches.length : 0}</div>
+                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(matches) ? matches.length : "…"}</div>
                 <div className="text-purple-100 text-xs sm:text-sm">Total Matches</div>
               </div>
               <div className="text-2xl sm:text-3xl lg:text-4xl">⚡</div>
@@ -540,7 +540,7 @@ export default function Home() {
           <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(seasons) ? seasons.length : 0}</div>
+                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(seasons) ? seasons.length : "…"}</div>
                 <div className="text-orange-100 text-xs sm:text-sm">Total Seasons</div>
               </div>
               <div className="text-2xl sm:text-3xl lg:text-4xl">🏆</div>
