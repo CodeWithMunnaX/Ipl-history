@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import AvatarImage from "@/components/AvatarImage";
 import Image from "next/image";
 import CricketHero, { CountUp } from "@/components/CricketHero";
+import TeamLogo, { teamColor } from "@/components/TeamLogo";
 import Link from "next/link";
 import ChartsSection from "@/components/charts/ChartsSection";
 import SeasonStats from "@/components/SeasonStats";
@@ -495,31 +496,36 @@ export default function Home() {
           
           <div className="md:col-span-3">
             <h3 className="font-bold text-xl sm:text-2xl mb-4 sm:mb-6 text-gray-800 flex items-center gap-3">
-              🏟️ Teams in Season
+              🏟️ All IPL Teams <span className="text-sm font-medium text-gray-500">({Array.isArray(teams) ? teams.length : "…"} franchises, 2008–2025)</span>
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              {(teams || []).map((t: any) => {
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+              {(teams || []).map((t: any, i: number) => {
                 const teamId = t.team_id ?? t.id;
                 const teamName = t.team_name || t.name;
-                
+                const short = t.team_name_short || t.short_name;
+                const color = teamColor(short);
                 return (
-                  <Link 
-                    key={teamId} 
+                  <Link
+                    key={teamId}
                     href={`/teams/${teamId}`}
-                    className="border-2 rounded-xl p-3 sm:p-4 flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                    className="group card-lift animate-rise relative overflow-hidden rounded-2xl bg-white p-4 flex items-center gap-4 border border-gray-200 shadow-sm"
+                    style={{ animationDelay: `${Math.min(i, 12) * 0.04}s` }}
                   >
-                    <div className="relative">
-                      <Image 
-                        src={t.image_url || t.logo || fallbackTeamLogos[teamName?.toLowerCase()] || ''} 
-                        alt={teamName} 
-                        width={32} 
-                        height={32} 
-                        className="rounded-full border-2 border-blue-300" 
-                      />
+                    <span className="absolute inset-y-0 left-0 w-1.5" style={{ background: color }} />
+                    <span className="absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-10 transition-transform duration-500 group-hover:scale-150"
+                          style={{ background: color }} />
+                    <div className="relative shrink-0 rounded-full p-0.5 transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110"
+                         style={{ boxShadow: `0 0 0 2px ${color}` }}>
+                      <TeamLogo short={short} name={teamName} url={t.image_url || t.logo} size={52} />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold text-gray-800 text-xs sm:text-sm truncate">{teamName}</div>
+                    <div className="relative min-w-0">
+                      <div className="font-bold text-gray-900 leading-snug">{teamName}</div>
+                      <div className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold" style={{ color }}>
+                        <span className="h-1.5 w-1.5 rounded-full" style={{ background: color }} />
+                        {short}
+                      </div>
                     </div>
+                    <span className="relative ml-auto text-gray-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-gray-500">→</span>
                   </Link>
                 );
               })}
