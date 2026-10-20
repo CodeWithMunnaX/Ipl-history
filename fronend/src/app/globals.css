@@ -120,3 +120,98 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ---------- Dashboard: night-stadium hero with bat & ball animation ---------- */
+.hero-stadium {
+  background:
+    radial-gradient(60% 80% at 15% 0%, rgba(255, 255, 255, 0.16), transparent 60%),
+    radial-gradient(50% 70% at 90% 10%, rgba(253, 224, 71, 0.14), transparent 60%),
+    linear-gradient(135deg, #0b1e4d 0%, #1e3a8a 45%, #4c1d95 100%);
+}
+.floodlight {
+  position: absolute;
+  top: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 65%);
+  filter: blur(6px);
+  animation: flood-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes flood-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.hero-stadium svg .bat,
+.hero-stadium svg .ball,
+.hero-stadium svg .impact,
+.hero-stadium svg .six-pop { transform-box: view-box; }
+
+.hero-stadium svg .bat {
+  transform-origin: 150px 60px;
+  animation: bat-swing 3.6s cubic-bezier(.55, 0, .3, 1) infinite;
+}
+@keyframes bat-swing {
+  0%, 12% { transform: rotate(8deg); }
+  30% { transform: rotate(62deg); }          /* backlift */
+  40% { transform: rotate(-20deg); }         /* contact */
+  50%, 70% { transform: rotate(-95deg); }    /* follow-through */
+  88%, 100% { transform: rotate(8deg); }
+}
+
+.hero-stadium svg .ball {
+  animation: ball-flight 3.6s linear infinite;
+}
+@keyframes ball-flight {
+  0% { transform: translate(440px, 120px); opacity: 0; animation-timing-function: ease-in; }
+  6% { transform: translate(410px, 128px); opacity: 1; animation-timing-function: ease-in; }
+  28% { transform: translate(262px, 228px); animation-timing-function: ease-out; }  /* bounce on the pitch */
+  40% { transform: translate(188px, 166px); animation-timing-function: ease-out; }  /* off the bat */
+  56% { transform: translate(330px, 46px); opacity: 1; }
+  68% { transform: translate(450px, -40px); opacity: 0; }
+  100% { transform: translate(450px, -40px); opacity: 0; }
+}
+.hero-stadium svg .seam {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: seam-spin 0.45s linear infinite;
+}
+@keyframes seam-spin { to { transform: rotate(360deg); } }
+
+.hero-stadium svg .impact {
+  transform-origin: 186px 168px;
+  animation: impact 3.6s ease-out infinite;
+}
+@keyframes impact {
+  0%, 38% { transform: scale(0.2); opacity: 0; }
+  41% { transform: scale(1); opacity: 1; }
+  52%, 100% { transform: scale(1.8); opacity: 0; }
+}
+
+.hero-stadium svg .six-pop {
+  transform-origin: 330px 50px;
+  animation: six-pop 3.6s ease-out infinite;
+}
+@keyframes six-pop {
+  0%, 54% { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+  62% { transform: scale(1.2) rotate(4deg); opacity: 1; }
+  70%, 82% { transform: scale(1) rotate(0); opacity: 1; }
+  92%, 100% { transform: scale(0.9); opacity: 0; }
+}
+
+/* Entrance and hover motion for dashboard cards */
+.animate-rise { animation: rise 0.7s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+.card-lift { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.card-lift:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -16px rgba(15, 23, 42, 0.35); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-stadium *, .floodlight, .animate-rise, .card-lift { animation: none !important; transition: none !important; }
+  .hero-stadium svg .ball { transform: translate(330px, 46px); opacity: 1; }
+  .hero-stadium svg .six-pop { opacity: 1; }
+}

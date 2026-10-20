@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AvatarImage from "@/components/AvatarImage";
 import Image from "next/image";
+import CricketHero, { CountUp } from "@/components/CricketHero";
 import Link from "next/link";
 import ChartsSection from "@/components/charts/ChartsSection";
 import SeasonStats from "@/components/SeasonStats";
@@ -167,30 +168,51 @@ export default function Home() {
     <AppSidebar>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-green-50">
         <div className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 lg:space-y-8">
-          {/* Header with Gradient */}
-          <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 rounded-2xl p-4 sm:p-6 lg:p-8 text-white shadow-2xl">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex-1">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">🏏 IPL Dashboard</h1>
-                <p className="text-blue-100 text-sm sm:text-base lg:text-lg">Comprehensive Cricket Analytics & Insights</p>
-              </div>
-              <div className="flex items-center gap-2 sm:gap-4">
-                <span className="text-blue-100 font-medium text-sm sm:text-base">Season:</span>
-                <Select value={season} onValueChange={(val) => setSeason(val)}>
-                  <SelectTrigger className="w-24 sm:w-28 lg:w-32 bg-white/20 border-white/30 text-white text-sm">
-                    <SelectValue placeholder="Select Season" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {seasonOptions.map((s) => (
-                      <SelectItem key={s} value={s}>{s}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          <CricketHero
+            chips={[
+              { label: "Seasons", value: Array.isArray(seasons) ? seasons.length : undefined },
+              { label: "Teams", value: Array.isArray(teams) ? teams.length : undefined },
+              { label: "Players", value: Array.isArray(players) ? players.length : undefined },
+            ]}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-blue-100">Season</span>
+              <Select value={season} onValueChange={(val) => setSeason(val)}>
+                <SelectTrigger className="w-32 bg-white/15 border-white/30 text-white font-semibold backdrop-blur-sm">
+                  <SelectValue placeholder="Select Season" />
+                </SelectTrigger>
+                <SelectContent>
+                  {seasonOptions.map((s) => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+          </CricketHero>
+
+          {/* Season at a glance */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              { label: "Matches", value: Array.isArray(matches) ? matches.length : undefined, icon: "🏟️", tone: "from-blue-500 to-indigo-600" },
+              { label: "Top run-scorer", value: topBatsmen?.[0]?.total_runs ?? topBatsmen?.[0]?.runs, icon: "🏏", tone: "from-orange-500 to-amber-500", sub: topBatsmen?.[0]?.player_name },
+              { label: "Top wicket-taker", value: topBowlers?.[0]?.total_wickets ?? topBowlers?.[0]?.wickets, icon: "🎯", tone: "from-purple-500 to-fuchsia-600", sub: topBowlers?.[0]?.player_name },
+              { label: "Teams this season", value: Array.isArray(matches) ? new Set(matches.flatMap((m: any) => [m.team1, m.team2])).size : undefined, icon: "🛡️", tone: "from-emerald-500 to-teal-600" },
+            ].map((c, i) => (
+              <div key={c.label} className={`card-lift animate-rise rounded-2xl bg-gradient-to-br ${c.tone} p-4 sm:p-5 text-white shadow-lg`}
+                   style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="text-2xl sm:text-3xl font-extrabold tabular-nums"><CountUp value={c.value} /></div>
+                    <div className="text-xs sm:text-sm text-white/85 font-medium">{c.label}</div>
+                    {c.sub && <div className="text-xs text-white/75 mt-0.5 truncate">{c.sub}</div>}
+                  </div>
+                  <div className="text-2xl sm:text-3xl drop-shadow">{c.icon}</div>
+                </div>
+              </div>
+            ))}
           </div>
         {winners && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 animate-rise [animation-delay:0.35s]">
             <Card className="min-h-[120px] sm:min-h-[140px] bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <CardTitle className="text-yellow-700 flex items-center gap-2">
@@ -276,7 +298,7 @@ export default function Home() {
             </Card>
           </div>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 animate-rise [animation-delay:0.45s]">
           {/* Orange Cap - Top Batsman */}
           {Array.isArray(topBatsmen) && topBatsmen.length > 0 && (
             <div className="md:col-span-1">
@@ -379,7 +401,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 animate-rise [animation-delay:0.45s]">
           <div className="md:col-span-3">
             <h3 className="font-bold text-xl sm:text-2xl mb-4 sm:mb-6 text-gray-800 flex items-center gap-3">
               🏏 Top Batsmen
@@ -505,106 +527,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Quick Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(teams) ? teams.length : "…"}</div>
-                <div className="text-blue-100 text-xs sm:text-sm">Total Teams</div>
-              </div>
-              <div className="text-2xl sm:text-3xl lg:text-4xl">🏏</div>
-            </div>
-          </div>
-          
-          <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(players) ? players.length : "…"}</div>
-                <div className="text-green-100 text-xs sm:text-sm">Total Players</div>
-              </div>
-              <div className="text-2xl sm:text-3xl lg:text-4xl">👥</div>
-            </div>
-          </div>
-          
-          <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(matches) ? matches.length : "…"}</div>
-                <div className="text-purple-100 text-xs sm:text-sm">Total Matches</div>
-              </div>
-              <div className="text-2xl sm:text-3xl lg:text-4xl">⚡</div>
-            </div>
-          </div>
-          
-          <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{Array.isArray(seasons) ? seasons.length : "…"}</div>
-                <div className="text-orange-100 text-xs sm:text-sm">Total Seasons</div>
-              </div>
-              <div className="text-2xl sm:text-3xl lg:text-4xl">🏆</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200">
-          <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            📈 Recent Activity
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <div>
-                  <div className="font-semibold text-gray-800">Live Matches</div>
-                  <div className="text-sm text-gray-600">Real-time updates available</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <div>
-                  <div className="font-semibold text-gray-800">Player Stats</div>
-                  <div className="text-sm text-gray-600">Comprehensive player analytics</div>
-                </div>
-
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
-                <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                <div>
-                  <div className="font-semibold text-gray-800">Team Performance</div>
-                  <div className="text-sm text-gray-600">Detailed team statistics</div>
-                </div>
-              </div>
-
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div>
-                  <div className="font-semibold text-gray-800">Match Scorecards</div>
-                  <div className="text-sm text-gray-600">Complete match details</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div>
-                  <div className="font-semibold text-gray-800">Season Analysis</div>
-                  <div className="text-sm text-gray-600">Year-wise performance data</div>
-                </div>
-
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
-                <div className="w-3 h-3 bg-indigo-500 rounded-full"></div>
-                <div>
-                  <div className="font-semibold text-gray-800">Interactive Charts</div>
-                  <div className="text-sm text-gray-600">Visual data representation</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         </div>
     </div>
     </AppSidebar>
